@@ -87,6 +87,7 @@
 %% --- Espaciado de párrafos
 \usepackage{parskip}
 \setlength{\parskip}{6pt}
+\renewcommand{\arraystretch}{1.4}
 
 %% -----------------------------------------------------------------
 %% MEMBRETE DE FONDO (8% opacidad en todas las páginas)
@@ -148,6 +149,9 @@
   {\FuenteTitulo\normalsize\color{GrisPizarra}\bfseries}
   {\thesubsection.}{0.5em}{}
 
+\titlespacing*{\section}   {0pt}{1.8em}{0.6em}
+\titlespacing*{\subsection}{0pt}{1.2em}{0.4em}
+
 %% -----------------------------------------------------------------
 %% MACRO: PORTADA
 %% -----------------------------------------------------------------
@@ -189,7 +193,7 @@
 \newcommand{\EstadoCompletado}{%
   \textcolor{VerdeTarea}{\small\textbf{Completado}}}
 \newcommand{\EstadoEnCurso}{%
-  \textcolor{AzulITM}{\small\textbf{En curso}}}
+  \textcolor{AzulDigital}{\small\textbf{En curso}}}
 \newcommand{\EstadoPendiente}{%
   \textcolor{GrisMedio}{\small\textbf{Pendiente}}}
 \newcommand{\EstadoBloqueado}{%
@@ -236,7 +240,8 @@
   numbers=left, numbersep=10pt,
   breaklines=true, breakatwhitespace=false,
   frame=none, tabsize=2,
-  showstringspaces=false
+  showstringspaces=false,
+  aboveskip=8pt, belowskip=8pt
 }
 \lstset{style=coriotcode}
 
@@ -259,6 +264,7 @@
 %%  INICIO DEL DOCUMENTO
 %% =================================================================
 \begin{document}
+\color{GrisPizarra}
 
 %% -----------------------------------------------------------------
 %% === VARIANTE A: PERIÓDICO === descomenta esta sección ===

@@ -86,6 +86,7 @@
 %% --- Espaciado
 \usepackage{parskip}
 \setlength{\parskip}{6pt}
+\renewcommand{\arraystretch}{1.4}
 
 %% -----------------------------------------------------------------
 %% MEMBRETE DE FONDO
@@ -134,6 +135,10 @@
   {\normalsize\color{GrisPizarra}\bfseries\itshape}
   {\thesubsubsection.}{0.5em}{}
 
+\titlespacing*{\section}      {0pt}{1.8em}{0.6em}
+\titlespacing*{\subsection}   {0pt}{1.2em}{0.4em}
+\titlespacing*{\subsubsection}{0pt}{0.8em}{0.3em}
+
 %% -----------------------------------------------------------------
 %% CAJAS tcolorbox
 %% -----------------------------------------------------------------
@@ -161,7 +166,7 @@
     boxrule=0.6pt, left=8pt, top=6pt, bottom=6pt
   },
   cajaResumen/.style={
-    colback=AzulITM!6, colframe=AzulITM,
+    colback=AzulITM!8, colframe=AzulITM,
     fonttitle=\FuenteTitulo\normalsize\bfseries, coltitle=white,
     boxrule=1pt, title=Resumen Ejecutivo,
     left=10pt, right=10pt, top=8pt, bottom=8pt
@@ -180,7 +185,8 @@
   numberstyle=\tiny\color{GrisMedio},
   numbers=left, numbersep=10pt,
   breaklines=true, frame=none,
-  tabsize=2, showstringspaces=false
+  tabsize=2, showstringspaces=false,
+  aboveskip=8pt, belowskip=8pt
 }
 \lstset{style=coriotcode}
 
@@ -188,6 +194,7 @@
 %%  INICIO DEL DOCUMENTO
 %% =================================================================
 \begin{document}
+\color{GrisPizarra}
 
 %% -----------------------------------------------------------------
 %% 1. PORTADA
