@@ -1,0 +1,506 @@
+%% ╔══════════════════════════════════════════════════════════════════╗
+%% ║         CORIOTLAB — PLANTILLA INFORME DE ACTIVIDADES            ║
+%% ║         Documento interno · flexible                            ║
+%% ║         Dos variantes: PERIÓDICO y GUÍA                        ║
+%% ╚══════════════════════════════════════════════════════════════════╝
+%%
+%% ═══════════════════════════════════════════════════════════════════
+%% FICHA DE USO
+%% ═══════════════════════════════════════════════════════════════════
+%% PARA QUÉ: Documentar actividades realizadas en un período definido
+%%           (semanal, quincenal o mensual), o guías técnicas paso a paso.
+%% PARA QUIÉN: Uso interno — equipo y dirección de CORIOTLAB.
+%% CUÁNDO: Al final de cada período de reporte.
+%% VARIANTES:
+%%   - PERIÓDICO: reportes regulares con tabla de actividades y estados.
+%%   - GUÍA:      documentación de procedimientos técnicos con código.
+%% COMPILAR: xelatex -interaction=nonstopmode plantilla_actividades.tex
+%%           (doble pasada — ejecutar el comando dos veces)
+%% OUTPUT:   plantilla_actividades.pdf (en la misma carpeta)
+%% ═══════════════════════════════════════════════════════════════════
+
+%% ═══════════════════════════════════════════════════════════════════
+%% ZONA DE CONFIGURACIÓN — editar aquí antes de compilar
+%% ═══════════════════════════════════════════════════════════════════
+
+%% VARIANTE ACTIVA: Controla qué sección del documento se compila.
+%%   "periodico" → activa tabla de actividades con estados.
+%%   "guia"      → activa documentación de procedimiento técnico.
+%% Para cambiar de variante: 1) edite este valor, 2) comente la sección
+%% activa del cuerpo y descomente la sección correspondiente.
+\newcommand{\TipoVariante}{periodico}
+
+%% TIPO DE PERÍODO (solo para Variante Periódico):
+%%   Valores permitidos: Semanal | Quincenal | Mensual
+%%   Aparece en el encabezado de la portada: "Informe Semanal", etc.
+\newcommand{\TipoPeriodo}{Semanal}
+
+%% TÍTULO: Nombre descriptivo del proyecto o trabajo documentado.
+%%   Máximo 80 caracteres. Evitar abreviaciones.
+%%   Aparece en portada y en el encabezado de cada página.
+%%   Ejemplo: "Sistema de Monitoreo Ambiental con ESP32"
+\newcommand{\DocTitulo}{[Título del informe o proyecto]}
+
+%% NÚMERO DE DOCUMENTO: Identificador único.
+%%   Formato: IA-AAAA-NNN
+%%   IA = Informe de Actividades | AAAA = año | NNN = número correlativo (001, 002…)
+%%   Ejemplo: IA-2025-001
+\newcommand{\DocNumero}{IA-2025-[NNN]}
+
+%% AUTOR: Nombre completo de quien elabora el informe.
+%%   Aparece en portada y en la firma al final.
+\newcommand{\DocAutor}{[Nombre completo del autor]}
+
+%% CARGO: Rol del autor dentro de CORIOTLAB.
+%%   Valores frecuentes: Investigador | Investigador Principal |
+%%                       Monitor | Director | Auxiliar de laboratorio
+\newcommand{\DocCargo}{[Cargo --- CORIOTLAB]}
+
+%% PROYECTO: Nombre oficial del proyecto al que pertenece este informe.
+%%   Debe coincidir con el nombre registrado en el plan de trabajo.
+\newcommand{\DocProyecto}{[Nombre del proyecto]}
+
+%% PERÍODO REPORTADO: Rango de fechas del período documentado.
+%%   Formato libre pero coherente. Ejemplo: "16 al 20 de junio de 2025"
+\newcommand{\DocPeriodo}{[Período reportado: ej. "16 al 20 de junio de 2025"]}
+
+%% FECHA DE ENTREGA: Fecha en que se entrega el informe.
+%%   Formato: DD de mes de AAAA — Ejemplo: 20 de junio de 2025
+%%   Use \today para fecha automática del sistema, o escriba la fecha fija.
+\newcommand{\DocFecha}{[DD de mes de AAAA]}
+
+%% VERSIÓN: Versión del documento. Iniciar en 1.0.
+%%   Incrementar decimalmente en revisiones menores (1.1, 1.2…);
+%%   incrementar entero en reestructuraciones mayores (2.0).
+\newcommand{\DocVersion}{1.0}
+
+%% ═══════════════════════════════════════════════════════════════════
+
+\documentclass[12pt, letterpaper]{article}
+
+%% --- Codificación y lenguaje
+\usepackage[spanish, es-nodecimaldot, es-noshorthands]{babel}
+
+%% --- Fuentes (XeLaTeX --- cargar por nombre de familia Windows)
+\usepackage{fontspec}
+\setmainfont{Inter}
+\newfontfamily\FuenteTitulo{MuseoModerno}
+\newfontfamily\FuenteCodigo{Space Mono}
+
+%% --- Geometría
+\usepackage[
+  top=2.8cm, bottom=2.8cm,
+  left=2.5cm, right=2.5cm,
+  headheight=1.8cm
+]{geometry}
+
+%% --- Color
+\usepackage[table]{xcolor}
+\definecolor{AzulITM}     {HTML}{102D69}
+\definecolor{Magenta}     {HTML}{C14894}
+\definecolor{AzulDigital} {HTML}{56ACDE}
+\definecolor{GrisPizarra} {HTML}{2F2F2F}
+\definecolor{GrisClaro}   {HTML}{F2F2F2}
+\definecolor{GrisMedio}   {HTML}{AAAAAA}
+\definecolor{GrisLinea}   {HTML}{DDDDDD}
+\definecolor{Blanco}      {HTML}{FFFFFF}
+\definecolor{VerdeTarea}  {HTML}{1A5C35}
+
+%% --- Gráficos y membrete
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{eso-pic}
+
+%% --- Encabezado y pie
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+
+%% --- Tablas
+\usepackage{longtable}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{colortbl}
+\usepackage{multirow}
+
+%% --- Listas
+\usepackage{enumitem}
+
+%% --- Cajas
+\usepackage[most]{tcolorbox}
+
+%% --- Código
+\usepackage{listings}
+
+%% --- Hipervínculos
+\usepackage[hidelinks]{hyperref}
+
+%% --- Espaciado de párrafos
+\usepackage{parskip}
+\setlength{\parskip}{6pt}
+\renewcommand{\arraystretch}{1.4}
+
+%% -----------------------------------------------------------------
+%% MEMBRETE DE FONDO (8% opacidad en todas las páginas)
+%% -----------------------------------------------------------------
+\AddToShipoutPictureBG{%
+  \begin{tikzpicture}[remember picture, overlay]
+    \node[opacity=0.08] at (current page.center) {%
+      \includegraphics[width=\paperwidth, height=\paperheight,
+        keepaspectratio=false]%
+        {../../membretes/membrete_azul.png}%
+    };
+  \end{tikzpicture}%
+}
+
+%% -----------------------------------------------------------------
+%% ENCABEZADO Y PIE DE PÁGINA
+%% -----------------------------------------------------------------
+\pagestyle{fancy}
+\fancyhf{}
+
+\fancyhead[L]{%
+  {\FuenteTitulo\small\color{AzulITM}\textbf{CORIOTLAB}}%
+  {\color{GrisMedio}\small\ \ |\ \ }%
+  {\small\color{GrisPizarra}\DocTitulo}%
+}
+\fancyhead[R]{%
+  {\small\color{GrisMedio}\DocNumero}%
+}
+\fancyfoot[L]{%
+  {\footnotesize\color{GrisMedio}www.coriotlab.co\ \ |\ \ info@coriotlab.co}%
+}
+\fancyfoot[C]{%
+  {\footnotesize\color{GrisMedio}\DocFecha}%
+}
+\fancyfoot[R]{%
+  {\footnotesize\color{GrisMedio}Página \thepage\ de \pageref{LastPage}}%
+}
+
+\renewcommand{\footrulewidth}{0.4pt}
+\renewcommand{\footrule}{%
+  {\color{GrisLinea}\rule{\headwidth}{0.4pt}}%
+  \vskip 4pt%
+}
+\renewcommand{\headrulewidth}{1.2pt}
+\renewcommand{\headrule}{%
+  \vspace{2pt}%
+  {\color{AzulITM}\rule{\headwidth}{1.2pt}}%
+}
+
+%% -----------------------------------------------------------------
+%% ESTILOS DE SECCIONES
+%% -----------------------------------------------------------------
+\usepackage{titlesec}
+\titleformat{\section}
+  {\FuenteTitulo\large\color{AzulITM}\bfseries}
+  {\thesection.}{0.5em}{}[{\color{AzulITM}\titlerule[0.8pt]}]
+
+\titleformat{\subsection}
+  {\FuenteTitulo\normalsize\color{GrisPizarra}\bfseries}
+  {\thesubsection.}{0.5em}{}
+
+\titlespacing*{\section}   {0pt}{1.8em}{0.6em}
+\titlespacing*{\subsection}{0pt}{1.2em}{0.4em}
+
+%% -----------------------------------------------------------------
+%% MACRO: PORTADA
+%% -----------------------------------------------------------------
+\newcommand{\PortadaActividades}[2]{%
+  \thispagestyle{empty}
+  \begin{tikzpicture}[remember picture, overlay]
+    \fill[AzulITM] (current page.north west)
+      rectangle ([yshift=-4.5cm] current page.north east);
+    \node[anchor=west, text=white] at
+      ([xshift=2.5cm, yshift=-1.5cm] current page.north west)
+      {\FuenteTitulo\large\textbf{#1}};
+    \node[anchor=east, text=AzulDigital] at
+      ([xshift=-2.5cm, yshift=-1.5cm] current page.north east)
+      {\FuenteTitulo\Large\textbf{#2}};
+    \draw[AzulDigital, line width=2pt]
+      ([yshift=-4.5cm] current page.north west) --
+      ([yshift=-4.5cm] current page.north east);
+  \end{tikzpicture}%
+  \vspace{3.8cm}
+
+  \begin{center}
+    {\FuenteTitulo\Huge\color{AzulITM}\textbf{\DocTitulo}}\\[0.6em]
+    {\FuenteTitulo\large\color{GrisPizarra}\DocProyecto}\\[2em]
+    {\color{GrisLinea}\rule{\linewidth}{0.6pt}}\\[1.2em]
+    \begin{tabular}{ll}
+      {\small\color{GrisMedio}Autor:}   & {\small\color{GrisPizarra}\DocAutor} \\[3pt]
+      {\small\color{GrisMedio}Cargo:}   & {\small\color{GrisPizarra}\DocCargo} \\[3pt]
+      {\small\color{GrisMedio}Período:} & {\small\color{GrisPizarra}\DocPeriodo} \\[3pt]
+      {\small\color{GrisMedio}Versión:} & {\small\color{GrisPizarra}\DocVersion} \\[3pt]
+      {\small\color{GrisMedio}Fecha:}   & {\small\color{GrisPizarra}\DocFecha} \\
+    \end{tabular}
+  \end{center}
+  \newpage
+}
+
+%% -----------------------------------------------------------------
+%% MACRO: ESTADO DE TAREA
+%% -----------------------------------------------------------------
+\newcommand{\EstadoCompletado}{%
+  \textcolor{VerdeTarea}{\small\textbf{Completado}}}
+\newcommand{\EstadoEnCurso}{%
+  \textcolor{AzulDigital}{\small\textbf{En curso}}}
+\newcommand{\EstadoPendiente}{%
+  \textcolor{GrisMedio}{\small\textbf{Pendiente}}}
+\newcommand{\EstadoBloqueado}{%
+  \textcolor{Magenta}{\small\textbf{Bloqueado}}}
+
+%% -----------------------------------------------------------------
+%% CAJAS tcolorbox
+%% -----------------------------------------------------------------
+\tcbset{
+  cajaNota/.style={
+    colback=AzulDigital!10, colframe=AzulDigital,
+    fonttitle=\FuenteTitulo\small\bfseries,
+    coltitle=white, boxrule=0pt, leftrule=4pt,
+    title=Nota, left=8pt, top=6pt, bottom=6pt
+  },
+  cajaAlerta/.style={
+    colback=Magenta!8, colframe=Magenta,
+    fonttitle=\FuenteTitulo\small\bfseries,
+    coltitle=white, boxrule=0pt, leftrule=4pt,
+    title=Advertencia, left=8pt, top=6pt, bottom=6pt
+  },
+  cajaResultado/.style={
+    colback=AzulITM!8, colframe=AzulITM,
+    fonttitle=\FuenteTitulo\small\bfseries,
+    coltitle=white, boxrule=0pt, leftrule=4pt,
+    title=Resultado, left=8pt, top=6pt, bottom=6pt
+  },
+  cajaDatos/.style={
+    colback=GrisClaro, colframe=GrisLinea,
+    boxrule=0.6pt, left=8pt, top=6pt, bottom=6pt
+  }
+}
+
+%% -----------------------------------------------------------------
+%% CÓDIGO lstlisting
+%% -----------------------------------------------------------------
+\lstdefinestyle{coriotcode}{
+  basicstyle=\FuenteCodigo\small,
+  backgroundcolor=\color{GrisClaro},
+  commentstyle=\color{GrisMedio}\itshape,
+  keywordstyle=\color{AzulITM}\bfseries,
+  stringstyle=\color{Magenta},
+  numberstyle=\tiny\color{GrisMedio},
+  numbers=left, numbersep=10pt,
+  breaklines=true, breakatwhitespace=false,
+  frame=none, tabsize=2,
+  showstringspaces=false,
+  aboveskip=8pt, belowskip=8pt
+}
+\lstset{style=coriotcode}
+
+%% -----------------------------------------------------------------
+%% MACRO: FIRMA SIMPLE
+%% -----------------------------------------------------------------
+\newcommand{\FirmaSimple}{%
+  \vspace{2.5em}
+  \noindent
+  \begin{tabular}{p{7cm}}
+    \hline\\[-6pt]
+    {\small\color{GrisPizarra}\DocAutor}\\
+    {\small\color{GrisMedio}\DocCargo}\\
+    {\small\color{GrisMedio}CORIOTLAB --- ITM}\\
+    {\small\color{GrisMedio}\DocFecha}
+  \end{tabular}
+}
+
+%% =================================================================
+%%  INICIO DEL DOCUMENTO
+%% =================================================================
+\begin{document}
+\color{GrisPizarra}
+
+%% -----------------------------------------------------------------
+%% === VARIANTE A: PERIÓDICO ===
+%% Para reportes regulares de actividades (semanal, quincenal, mensual).
+%% Estructura: Portada + Tabla de actividades + Observaciones +
+%%             Próximos pasos + Firma.
+%% -----------------------------------------------------------------
+
+\PortadaActividades{Informe \TipoPeriodo}{\DocNumero}
+
+\section{Registro de Actividades}
+
+%% INSTRUCCIONES DE LA TABLA:
+%% - Cada fila es una actividad del período.
+%% - Alternar \rowcolor{white} y \rowcolor{GrisClaro} en filas.
+%% - Usar los macros de estado: \EstadoCompletado | \EstadoEnCurso |
+%%   \EstadoPendiente | \EstadoBloqueado
+%% - En Fecha usar formato DD/MM. En Hrs poner número entero.
+%% - Para actividades bloqueadas usar "---" en Fecha y Hrs.
+
+\setlength{\LTpre}{6pt}
+\setlength{\LTpost}{6pt}
+
+\begin{longtable}{
+  >{\centering\arraybackslash}p{0.55cm}
+  p{3.4cm}
+  p{5.6cm}
+  >{\centering\arraybackslash}p{1.6cm}
+  >{\centering\arraybackslash}p{0.9cm}
+  >{\centering\arraybackslash}p{2.2cm}
+}
+\rowcolor{AzulITM}
+\color{Blanco}\FuenteTitulo\small\bfseries N\textsuperscript{o} &
+\color{Blanco}\FuenteTitulo\small\bfseries Actividad &
+\color{Blanco}\FuenteTitulo\small\bfseries Descripción &
+\color{Blanco}\FuenteTitulo\small\bfseries Fecha &
+\color{Blanco}\FuenteTitulo\small\bfseries Hrs &
+\color{Blanco}\FuenteTitulo\small\bfseries Estado \\
+\endfirsthead
+\rowcolor{AzulITM}
+\color{Blanco}\FuenteTitulo\small\bfseries N\textsuperscript{o} &
+\color{Blanco}\FuenteTitulo\small\bfseries Actividad &
+\color{Blanco}\FuenteTitulo\small\bfseries Descripción &
+\color{Blanco}\FuenteTitulo\small\bfseries Fecha &
+\color{Blanco}\FuenteTitulo\small\bfseries Hrs &
+\color{Blanco}\FuenteTitulo\small\bfseries Estado \\
+\endhead
+%% --- FILA 1: Actividad completada (ejemplo de estado COMPLETADO)
+\rowcolor{white}
+1 & {[}Nombre corto de la actividad{]} &
+{[}Descripción detallada de lo realizado. Máx.\ 150 caracteres. Incluir
+herramientas, métodos o resultados obtenidos.{]} &
+{[}DD/MM{]} & {[}H{]} & \EstadoCompletado \\
+%% --- FILA 2: Actividad en progreso (ejemplo de estado EN CURSO)
+\rowcolor{GrisClaro}
+2 & {[}Nombre corto de la actividad{]} &
+{[}Descripción de actividad en progreso. Indicar porcentaje de avance
+o etapa actual si es relevante.{]} &
+{[}DD/MM{]} & {[}H{]} & \EstadoEnCurso \\
+%% --- FILA 3: Actividad planificada no iniciada (estado PENDIENTE)
+\rowcolor{white}
+3 & {[}Nombre corto de la actividad{]} &
+{[}Actividad planificada para el período pero aún no iniciada.
+Indicar la razón del retraso si aplica.{]} &
+{[}DD/MM{]} & --- & \EstadoPendiente \\
+%% --- FILA 4: Actividad con bloqueo externo (estado BLOQUEADO)
+\rowcolor{GrisClaro}
+4 & {[}Nombre corto de la actividad{]} &
+{[}Actividad detenida por una dependencia externa. Describir el
+impedimento y quién debe resolverlo.{]} &
+--- & --- & \EstadoBloqueado \\
+%% Agregar más filas según necesidad, alternando rowcolor{white} y rowcolor{GrisClaro}
+\end{longtable}
+
+\noindent{\small\color{GrisMedio}
+\textbf{Total horas registradas:} {[}Total{]}\,h
+\quad|\quad
+\textbf{Período:} \DocPeriodo
+}
+
+\section{Observaciones}
+
+%% INSTRUCCIONES DE OBSERVACIONES:
+%% Reemplace el texto guía (itálica gris) con el contenido real.
+%% Incluya: dificultades, cambios de alcance, decisiones relevantes.
+%% Máximo 3 párrafos. Use cajaNota para destacar información crítica.
+
+{\itshape\color{GrisMedio}%
+Registre aquí situaciones relevantes del período: dificultades encontradas,
+cambios de alcance, decisiones tomadas o cualquier información contextual
+que afecte el desarrollo del proyecto. Este campo es libre pero debe ser
+conciso. Máximo 3 párrafos.}
+
+\begin{tcolorbox}[cajaNota]
+  {[}Opcional: use esta caja para destacar una nota importante, alerta
+  o información que requiera atención especial del lector.{]}
+\end{tcolorbox}
+
+\section{Próximos Pasos}
+
+%% INSTRUCCIONES DE PRÓXIMOS PASOS:
+%% Cada ítem debe ser una acción concreta y accionable.
+%% Iniciar con verbo en infinitivo: "Completar", "Implementar", "Revisar"...
+%% Agregar o eliminar ítems según necesidad.
+
+\begin{itemize}[label={\color{AzulITM}\textbf{>}}, leftmargin=1.8em, itemsep=4pt]
+  \item {[}Acción concreta a realizar --- iniciar con verbo en infinitivo.{]}
+  \item {[}Responsable y fecha límite si aplica.{]}
+  \item {[}Recurso o dependencia necesaria para completar la acción.{]}
+\end{itemize}
+
+\FirmaSimple
+
+%% -----------------------------------------------------------------
+%% FIN VARIANTE A
+%% -----------------------------------------------------------------
+
+
+%% -----------------------------------------------------------------
+%% === VARIANTE B: GUÍA TÉCNICA ===
+%% Para documentar procedimientos, configuraciones o tutoriales.
+%% Estructura: Portada + Objetivo + Requisitos + Pasos con código +
+%%             Cajas de nota/alerta + Conclusión + Firma.
+%%
+%% PARA ACTIVAR: comente todo lo anterior desde \PortadaActividades
+%%               hasta \FirmaSimple y descomente este bloque.
+%% -----------------------------------------------------------------
+
+%\PortadaActividades{Guía Técnica}{\DocNumero}
+%
+%\section{Objetivo de la Guía}
+%
+%{[}Describa en 2--3 oraciones el objetivo de esta guía: qué proceso
+%documenta, qué sistema configura o qué procedimiento explica.
+%Ejemplo: "Esta guía describe los pasos para configurar un broker
+%MQTT local con HiveMQ CE en un servidor Ubuntu 22.04."{]}
+%
+%\section{Requisitos Previos}
+%
+%\begin{itemize}[label={\color{AzulITM}\textbf{>}}, leftmargin=1.8em, itemsep=4pt]
+%  \item {[}Requisito 1: hardware, software o conocimiento necesario.{]}
+%  \item {[}Requisito 2: versión mínima de herramienta o librería.{]}
+%  \item {[}Requisito 3: acceso o permiso requerido.{]}
+%\end{itemize}
+%
+%\section{Pasos}
+%
+%\subsection{{[}Nombre del paso 1{]}}
+%
+%{[}Descripción del paso. Explique qué hace el usuario y por qué.{]}
+%
+%\begin{tcolorbox}[cajaDatos]
+%\begin{lstlisting}[language=bash]
+%# [Comando o código del paso 1]
+%[comando-aqui]
+%\end{lstlisting}
+%\end{tcolorbox}
+%
+%\begin{tcolorbox}[cajaNota]
+%  {[}Opcional: nota aclaratoria sobre el paso anterior.{]}
+%\end{tcolorbox}
+%
+%\subsection{{[}Nombre del paso 2{]}}
+%
+%{[}Descripción del paso 2.{]}
+%
+%\begin{tcolorbox}[cajaDatos]
+%\begin{lstlisting}[language=Python]
+%# [Código del paso 2]
+%[codigo-aqui]
+%\end{lstlisting}
+%\end{tcolorbox}
+%
+%\begin{tcolorbox}[cajaAlerta]
+%  {[}Opcional: advertencia sobre un riesgo o error frecuente.{]}
+%\end{tcolorbox}
+%
+%\section{Conclusión}
+%
+%{[}Resuma en 2--3 oraciones el resultado esperado al completar la guía
+%y el siguiente paso natural (próxima guía, prueba de validación, etc.).{]}
+%
+%\FirmaSimple
+
+%% -----------------------------------------------------------------
+%% FIN VARIANTE B
+%% -----------------------------------------------------------------
+
+\end{document}

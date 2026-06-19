@@ -1,22 +1,30 @@
 # =============================================================
 # CORIOTLAB — Script de compilacion XeLaTeX
 # Uso: .\compile.ps1 [tipo]
-# Tipos: actividades | tecnicos | presentaciones | todos
+# Tipos originales: actividades | tecnicos | presentaciones | todos
+# Plantillas guia:  plantilla-actividades | plantilla-tecnico | plantilla-presentacion | plantillas
 # =============================================================
 
 param(
     [Parameter(Mandatory=$false)]
-    [ValidateSet("actividades","tecnicos","presentaciones","todos")]
+    [ValidateSet("actividades","tecnicos","presentaciones","todos",
+                 "plantilla-actividades","plantilla-tecnico","plantilla-presentacion","plantillas")]
     [string]$Tipo = "todos"
 )
 
 $BASE = Split-Path -Parent $MyInvocation.MyCommand.Path
 
 $DOCUMENTOS = @{
-    "actividades"    = @{ tex = "informes\actividades\informe_actividades.tex";   out = "output\actividades"    }
-    "tecnicos"       = @{ tex = "informes\tecnicos\informe_tecnico.tex";           out = "output\tecnicos"       }
-    "presentaciones" = @{ tex = "informes\presentaciones\presentacion.tex";        out = "output\presentaciones" }
+    "actividades"             = @{ tex = "informes\actividades\informe_actividades.tex";           out = "output\actividades"    }
+    "tecnicos"                = @{ tex = "informes\tecnicos\informe_tecnico.tex";                   out = "output\tecnicos"       }
+    "presentaciones"          = @{ tex = "informes\presentaciones\presentacion.tex";                out = "output\presentaciones" }
+    "plantilla-actividades"   = @{ tex = "plantillas\actividades\plantilla_actividades.tex";        out = "output\actividades"    }
+    "plantilla-tecnico"       = @{ tex = "plantillas\tecnicos\plantilla_tecnico.tex";               out = "output\tecnicos"       }
+    "plantilla-presentacion"  = @{ tex = "plantillas\presentaciones\plantilla_presentacion.tex";    out = "output\presentaciones" }
 }
+
+$TODOS_ORIGINALES  = @("actividades","tecnicos","presentaciones")
+$TODOS_PLANTILLAS  = @("plantilla-actividades","plantilla-tecnico","plantilla-presentacion")
 
 $AUX_EXT = @("*.aux","*.log","*.out","*.toc","*.lof","*.lot","*.nav","*.snm",
               "*.vrb","*.synctex.gz","*.fls","*.fdb_latexmk","*.xdv","*.bcf","*.run.xml")
@@ -77,7 +85,11 @@ Write-Host "  Tipo: $Tipo"                                 -ForegroundColor Cyan
 Write-Host "=============================================" -ForegroundColor Cyan
 
 if ($Tipo -eq "todos") {
-    foreach ($key in $DOCUMENTOS.Keys) {
+    foreach ($key in $TODOS_ORIGINALES) {
+        Compilar-Documento -NombreTipo $key -Info $DOCUMENTOS[$key]
+    }
+} elseif ($Tipo -eq "plantillas") {
+    foreach ($key in $TODOS_PLANTILLAS) {
         Compilar-Documento -NombreTipo $key -Info $DOCUMENTOS[$key]
     }
 } else {

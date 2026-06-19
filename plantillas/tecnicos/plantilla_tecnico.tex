@@ -1,0 +1,589 @@
+%% ╔══════════════════════════════════════════════════════════════════╗
+%% ║         CORIOTLAB — PLANTILLA INFORME TÉCNICO EXTERNO           ║
+%% ║         Nivel consultoría profesional                           ║
+%% ╚══════════════════════════════════════════════════════════════════╝
+%%
+%% ═══════════════════════════════════════════════════════════════════
+%% FICHA DE USO
+%% ═══════════════════════════════════════════════════════════════════
+%% PARA QUÉ: Documentar proyectos técnicos con rigor de consultoría:
+%%           diseño, implementación, resultados y recomendaciones.
+%% PARA QUIÉN: Uso externo — clientes, entidades, convocatorias.
+%%             También válido para informes internos formales.
+%% CUÁNDO: Al cierre de un proyecto o fase de desarrollo técnico.
+%% SECCIONES OPCIONALES (activar según proyecto):
+%%   OPT-A: Marco Teórico    OPT-B: Metodología
+%%   OPT-C: Desarrollo + Código    OPT-D: Resultados con indicadores
+%%   OPT-E: Recomendaciones  OPT-F: Referencias  OPT-G: Anexos
+%% COMPILAR: xelatex -interaction=nonstopmode plantilla_tecnico.tex
+%%           (doble pasada — ejecutar el comando dos veces)
+%% OUTPUT:   plantilla_tecnico.pdf (en la misma carpeta)
+%% ═══════════════════════════════════════════════════════════════════
+
+%% ═══════════════════════════════════════════════════════════════════
+%% ZONA DE CONFIGURACIÓN — editar aquí antes de compilar
+%% ═══════════════════════════════════════════════════════════════════
+
+%% TÍTULO: Nombre completo y descriptivo del informe técnico.
+%%   Máximo 100 caracteres. Debe identificar claramente el sistema o
+%%   proyecto documentado. Aparece en portada y encabezado.
+%%   Ejemplo: "Sistema de Monitoreo Ambiental Distribuido para CORIOTLAB"
+\newcommand{\DocTitulo}{[Título completo del informe técnico]}
+
+%% SUBTÍTULO: Complemento técnico del título. Describe el enfoque
+%%   metodológico, tecnológico o el alcance del documento.
+%%   Ejemplo: "Diseño, implementación y validación de una red IoT con ESP32"
+\newcommand{\DocSubtitulo}{[Subtítulo técnico: enfoque o alcance del proyecto]}
+
+%% NÚMERO DE DOCUMENTO: Identificador único del informe.
+%%   Formato: IT-AAAA-NNN
+%%   IT = Informe Técnico | AAAA = año | NNN = correlativo (001, 002…)
+%%   Ejemplo: IT-2025-001
+\newcommand{\DocNumero}{IT-2025-[NNN]}
+
+%% PROYECTO: Nombre oficial del proyecto al que pertenece el informe.
+%%   Debe coincidir con el registro en el portafolio de CORIOTLAB.
+\newcommand{\DocProyecto}{[Nombre oficial del proyecto]}
+
+%% CÓDIGO INTERNO: Código de seguimiento del proyecto.
+%%   Formato sugerido: CORIOT-AAAA-SIGLAS-NNN
+%%   Ejemplo: CORIOT-2025-MA-001
+\newcommand{\DocCodigo}{CORIOT-2025-[SIGLAS]-[NNN]}
+
+%% CLIENTE / ENTIDAD: Organización o persona que recibe el informe.
+%%   Ejemplo: "Laboratorio CORIOTLAB --- Facultad de Ingeniería, ITM"
+\newcommand{\DocCliente}{[Nombre del cliente o entidad destinataria]}
+
+%% PERÍODO: Rango de fechas que cubre el proyecto o fase documentada.
+%%   Formato: "Mes --- Mes AAAA" o "DD de mes --- DD de mes AAAA"
+%%   Ejemplo: "Enero --- Junio 2025"
+\newcommand{\DocPeriodo}{[Mes inicial] --- [Mes final] [AAAA]}
+
+%% LUGAR: Ciudad y país donde se desarrolló el proyecto.
+%%   Ejemplo: "Medellín, Colombia"
+\newcommand{\DocLugar}{Medellín, Colombia}
+
+%% VERSIÓN: Versión del documento. Iniciar en 1.0.
+%%   Incrementar decimalmente en revisiones; entero en reestructuraciones.
+\newcommand{\DocVersion}{1.0}
+
+%% FECHA: Fecha de emisión del informe.
+%%   Formato: DD de mes de AAAA — Ejemplo: 30 de junio de 2025
+\newcommand{\DocFecha}{[DD de mes de AAAA]}
+
+%% CONFIDENCIALIDAD: Nivel de acceso del documento.
+%%   Valores: "Uso interno --- CORIOTLAB" | "Confidencial" |
+%%            "Uso restringido" | "Público"
+\newcommand{\DocConfidencialidad}{Uso interno --- CORIOTLAB}
+
+%% AUTOR: Nombre completo del autor principal.
+\newcommand{\DocAutor}{[Nombre completo del autor]}
+
+%% CARGO DEL AUTOR: Rol del autor en el proyecto / CORIOTLAB.
+%%   Ejemplo: "Investigador Principal --- CORIOTLAB"
+\newcommand{\DocCargoAutor}{[Cargo --- CORIOTLAB]}
+
+%% REVISOR: Nombre completo de quien revisa y aprueba el informe.
+%%   Generalmente el director del laboratorio o líder del proyecto.
+\newcommand{\DocRevisor}{[Nombre del revisor]}
+
+%% CARGO DEL REVISOR: Rol del revisor.
+%%   Ejemplo: "Director de Laboratorio --- CORIOTLAB"
+\newcommand{\DocCargoRevisor}{[Cargo del revisor --- CORIOTLAB]}
+
+%% ENTIDAD: Institución a la que pertenecen autor y revisor.
+%%   Ejemplo: "CORIOTLAB --- ITM"
+\newcommand{\DocEntidad}{CORIOTLAB --- ITM}
+
+%% ═══════════════════════════════════════════════════════════════════
+
+\documentclass[12pt, letterpaper]{article}
+
+%% --- Codificación y lenguaje
+\usepackage[spanish, es-nodecimaldot, es-noshorthands]{babel}
+
+%% --- Fuentes (XeLaTeX --- por nombre de familia Windows)
+\usepackage{fontspec}
+\setmainfont{Inter}
+\newfontfamily\FuenteTitulo{MuseoModerno}
+\newfontfamily\FuenteCodigo{Space Mono}
+
+%% --- Geometría
+\usepackage[
+  top=2.8cm, bottom=2.8cm,
+  left=2.5cm, right=2.5cm,
+  headheight=1.8cm
+]{geometry}
+
+%% --- Color
+\usepackage[table]{xcolor}
+\definecolor{AzulITM}     {HTML}{102D69}
+\definecolor{Magenta}     {HTML}{C14894}
+\definecolor{AzulDigital} {HTML}{56ACDE}
+\definecolor{GrisPizarra} {HTML}{2F2F2F}
+\definecolor{GrisClaro}   {HTML}{F2F2F2}
+\definecolor{GrisMedio}   {HTML}{AAAAAA}
+\definecolor{GrisLinea}   {HTML}{DDDDDD}
+\definecolor{Blanco}      {HTML}{FFFFFF}
+
+%% --- Gráficos
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{eso-pic}
+
+%% --- Encabezado / pie
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+
+%% --- Tablas
+\usepackage{longtable}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{colortbl}
+\usepackage{multirow}
+
+%% --- Listas
+\usepackage{enumitem}
+
+%% --- Cajas
+\usepackage[most]{tcolorbox}
+
+%% --- Código
+\usepackage{listings}
+
+%% --- TOC y secciones
+\usepackage{titlesec}
+\usepackage{titletoc}
+\usepackage[hidelinks]{hyperref}
+
+%% --- Espaciado
+\usepackage{parskip}
+\setlength{\parskip}{6pt}
+\renewcommand{\arraystretch}{1.4}
+
+%% -----------------------------------------------------------------
+%% MEMBRETE DE FONDO
+%% -----------------------------------------------------------------
+\AddToShipoutPictureBG{%
+  \begin{tikzpicture}[remember picture, overlay]
+    \node[opacity=0.08] at (current page.center) {%
+      \includegraphics[width=\paperwidth, height=\paperheight,
+        keepaspectratio=false]%
+        {../../membretes/membrete_azul.png}%
+    };
+  \end{tikzpicture}%
+}
+
+%% -----------------------------------------------------------------
+%% ENCABEZADO Y PIE
+%% -----------------------------------------------------------------
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{%
+  {\FuenteTitulo\small\color{AzulITM}\textbf{CORIOTLAB}}%
+  {\color{GrisMedio}\small\ \ |\ \ }%
+  {\small\color{GrisPizarra}Informe Técnico}%
+}
+\fancyhead[R]{{\small\color{GrisMedio}\DocNumero}}
+\fancyfoot[L]{{\footnotesize\color{GrisMedio}www.coriotlab.co\ \ |\ \ info@coriotlab.co}}
+\fancyfoot[C]{{\footnotesize\color{GrisMedio}\DocFecha}}
+\fancyfoot[R]{{\footnotesize\color{GrisMedio}Página \thepage\ de \pageref{LastPage}}}
+\renewcommand{\footrulewidth}{0.4pt}
+\renewcommand{\footrule}{%
+  {\color{GrisLinea}\rule{\headwidth}{0.4pt}}\vskip 4pt}
+\renewcommand{\headrulewidth}{1.2pt}
+\renewcommand{\headrule}{%
+  \vspace{2pt}{\color{AzulITM}\rule{\headwidth}{1.2pt}}}
+
+%% -----------------------------------------------------------------
+%% SECCIONES
+%% -----------------------------------------------------------------
+\titleformat{\section}
+  {\FuenteTitulo\large\color{AzulITM}\bfseries}
+  {\thesection.}{0.5em}{}[{\color{AzulITM}\titlerule[0.8pt]}]
+\titleformat{\subsection}
+  {\FuenteTitulo\normalsize\color{GrisPizarra}\bfseries}
+  {\thesubsection.}{0.5em}{}
+\titleformat{\subsubsection}
+  {\normalsize\color{GrisPizarra}\bfseries\itshape}
+  {\thesubsubsection.}{0.5em}{}
+
+\titlespacing*{\section}      {0pt}{1.8em}{0.6em}
+\titlespacing*{\subsection}   {0pt}{1.2em}{0.4em}
+\titlespacing*{\subsubsection}{0pt}{0.8em}{0.3em}
+
+%% -----------------------------------------------------------------
+%% CAJAS tcolorbox
+%% -----------------------------------------------------------------
+\tcbset{
+  cajaNota/.style={
+    colback=AzulDigital!10, colframe=AzulDigital,
+    fonttitle=\FuenteTitulo\small\bfseries, coltitle=white,
+    boxrule=0pt, leftrule=4pt, title=Nota,
+    left=8pt, top=6pt, bottom=6pt
+  },
+  cajaAlerta/.style={
+    colback=Magenta!8, colframe=Magenta,
+    fonttitle=\FuenteTitulo\small\bfseries, coltitle=white,
+    boxrule=0pt, leftrule=4pt, title=Advertencia,
+    left=8pt, top=6pt, bottom=6pt
+  },
+  cajaResultado/.style={
+    colback=AzulITM!8, colframe=AzulITM,
+    fonttitle=\FuenteTitulo\small\bfseries, coltitle=white,
+    boxrule=0pt, leftrule=4pt, title=Resultado,
+    left=8pt, top=6pt, bottom=6pt
+  },
+  cajaDatos/.style={
+    colback=GrisClaro, colframe=GrisLinea,
+    boxrule=0.6pt, left=8pt, top=6pt, bottom=6pt
+  },
+  cajaResumen/.style={
+    colback=AzulITM!8, colframe=AzulITM,
+    fonttitle=\FuenteTitulo\normalsize\bfseries, coltitle=white,
+    boxrule=1pt, title=Resumen Ejecutivo,
+    left=10pt, right=10pt, top=8pt, bottom=8pt
+  }
+}
+
+%% -----------------------------------------------------------------
+%% CÓDIGO lstlisting
+%% -----------------------------------------------------------------
+\lstdefinestyle{coriotcode}{
+  basicstyle=\FuenteCodigo\small,
+  backgroundcolor=\color{GrisClaro},
+  commentstyle=\color{GrisMedio}\itshape,
+  keywordstyle=\color{AzulITM}\bfseries,
+  stringstyle=\color{Magenta},
+  numberstyle=\tiny\color{GrisMedio},
+  numbers=left, numbersep=10pt,
+  breaklines=true, frame=none,
+  tabsize=2, showstringspaces=false,
+  aboveskip=8pt, belowskip=8pt
+}
+\lstset{style=coriotcode}
+
+%% =================================================================
+%%  INICIO DEL DOCUMENTO
+%% =================================================================
+\begin{document}
+\color{GrisPizarra}
+
+%% -----------------------------------------------------------------
+%% 1. PORTADA
+%% -----------------------------------------------------------------
+\thispagestyle{empty}
+\begin{tikzpicture}[remember picture, overlay]
+  \fill[AzulITM] (current page.north west)
+    rectangle ([yshift=-5cm] current page.north east);
+  \node[anchor=west, text=white] at
+    ([xshift=2.5cm, yshift=-1.6cm] current page.north west)
+    {\FuenteTitulo\large\textbf{Informe Técnico}};
+  \node[anchor=east, text=AzulDigital] at
+    ([xshift=-2.5cm, yshift=-1.6cm] current page.north east)
+    {\FuenteTitulo\Large\textbf{\DocNumero}};
+  \draw[AzulDigital, line width=2pt]
+    ([yshift=-5cm] current page.north west) --
+    ([yshift=-5cm] current page.north east);
+\end{tikzpicture}
+\vspace{4.2cm}
+
+\begin{center}
+  {\FuenteTitulo\huge\color{AzulITM}\textbf{\DocTitulo}}\\[0.8em]
+  {\FuenteTitulo\large\color{GrisPizarra}\DocSubtitulo}\\[2.4em]
+  {\color{GrisLinea}\rule{\linewidth}{0.8pt}}\\[1.4em]
+  \begin{tabular}{@{}ll@{}}
+    {\small\color{GrisMedio}Proyecto:}          & {\small\color{GrisPizarra}\DocProyecto} \\[4pt]
+    {\small\color{GrisMedio}Código:}            & {\small\color{GrisPizarra}\DocCodigo} \\[4pt]
+    {\small\color{GrisMedio}Cliente / Entidad:} & {\small\color{GrisPizarra}\DocCliente} \\[4pt]
+    {\small\color{GrisMedio}Período:}           & {\small\color{GrisPizarra}\DocPeriodo} \\[4pt]
+    {\small\color{GrisMedio}Lugar:}             & {\small\color{GrisPizarra}\DocLugar} \\[4pt]
+    {\small\color{GrisMedio}Versión:}           & {\small\color{GrisPizarra}\DocVersion} \\[4pt]
+    {\small\color{GrisMedio}Fecha:}             & {\small\color{GrisPizarra}\DocFecha} \\[4pt]
+    {\small\color{GrisMedio}Confidencialidad:}  & {\small\color{GrisPizarra}\DocConfidencialidad} \\
+  \end{tabular}\\[2em]
+  %% RESUMEN EJECUTIVO: síntesis del informe en 5–8 oraciones.
+  %% Debe responder: ¿qué se hizo?, ¿cómo?, ¿cuál fue el resultado clave?
+  %% No usar títulos ni listas dentro de esta caja.
+  \begin{tcolorbox}[cajaResumen, width=\linewidth]
+    {[}Síntesis ejecutiva del informe. Describa en 5--8 oraciones:
+    el contexto del proyecto, el problema abordado, la metodología
+    empleada, los principales resultados obtenidos y la conclusión
+    central. Evite tecnicismos excesivos: este resumen lo leerán
+    directivos y clientes sin formación técnica profunda.{]}
+  \end{tcolorbox}
+\end{center}
+\newpage
+
+%% -----------------------------------------------------------------
+%% 2. CONTROL DE VERSIONES
+%% -----------------------------------------------------------------
+\section*{Control de Versiones}
+\addcontentsline{toc}{section}{Control de Versiones}
+
+%% Registre cada versión del documento desde la inicial hasta la actual.
+%% Formato fecha: DD/MM/AAAA. Descripción: qué cambió en esa versión.
+
+\setlength{\LTpre}{4pt}\setlength{\LTpost}{4pt}
+\begin{longtable}{
+  >{\centering\arraybackslash}p{1.4cm}
+  >{\centering\arraybackslash}p{2.6cm}
+  p{3.8cm}
+  p{6.4cm}
+}
+\rowcolor{AzulITM}
+\color{Blanco}\FuenteTitulo\small\bfseries Versión &
+\color{Blanco}\FuenteTitulo\small\bfseries Fecha &
+\color{Blanco}\FuenteTitulo\small\bfseries Autor &
+\color{Blanco}\FuenteTitulo\small\bfseries Descripción del cambio \\
+\endfirsthead
+\rowcolor{AzulITM}
+\color{Blanco}\FuenteTitulo\small\bfseries Versión &
+\color{Blanco}\FuenteTitulo\small\bfseries Fecha &
+\color{Blanco}\FuenteTitulo\small\bfseries Autor &
+\color{Blanco}\FuenteTitulo\small\bfseries Descripción del cambio \\
+\endhead
+\rowcolor{white}
+1.0 & {[}DD/MM/AAAA{]} & \DocAutor & Versión inicial --- {[}descripción del contenido inicial: diseño, alcance, etc.{]} \\
+\rowcolor{GrisClaro}
+1.1 & {[}DD/MM/AAAA{]} & \DocAutor & {[}Descripción de la revisión: correcciones, adiciones, cambios de alcance.{]} \\
+%% Agregar filas según versiones del documento. Eliminar filas sobrantes.
+\end{longtable}
+
+%% -----------------------------------------------------------------
+%% 3. TABLA DE CONTENIDO
+%% -----------------------------------------------------------------
+\newpage
+\tableofcontents
+\newpage
+
+%% -----------------------------------------------------------------
+%% 4. INTRODUCCIÓN
+%% -----------------------------------------------------------------
+\section{Introducción}
+
+%% La introducción contextualiza el informe. Debe incluir:
+%% - Contexto institucional o de negocio del proyecto
+%% - Problema o necesidad que motiva el trabajo
+%% - Descripción general de la solución abordada
+%% - Alcance del documento (qué cubre y qué no)
+%% Extensión recomendada: 2–4 párrafos.
+
+{\itshape\color{GrisMedio}%
+{[}Párrafo 1: contexto institucional del proyecto. ¿En qué marco se
+desarrolla este trabajo? ¿Qué área o entidad lo impulsa?{]}
+
+{[}Párrafo 2: descripción del problema o necesidad que motivó el proyecto.
+¿Qué situación se busca resolver o mejorar?{]}
+
+{[}Párrafo 3: descripción general de la solución implementada y el
+enfoque técnico adoptado.{]}}
+
+\begin{tcolorbox}[cajaDatos]
+  \textbf{Alcance del documento:} {[}Especifique qué fases, sistemas
+  o componentes cubre este informe, y cuáles quedan fuera del alcance.
+  Indique el período que comprende: \DocPeriodo.{]}
+\end{tcolorbox}
+
+%% -----------------------------------------------------------------
+%% 5. OBJETIVOS
+%% -----------------------------------------------------------------
+\section{Objetivos}
+
+\subsection{Objetivo General}
+
+%% El objetivo general describe el propósito global del proyecto en
+%% una sola oración: QUÉ se hace + CÓMO + PARA QUÉ.
+%% Iniciar con verbo en infinitivo: "Diseñar", "Implementar", "Desarrollar"...
+
+{\itshape\color{GrisMedio}%
+{[}Verbo infinitivo{]} {[}objeto o sistema desarrollado{]} para {[}propósito
+o beneficio esperado{]}, mediante {[}método o tecnología empleada{]}.}
+
+\subsection{Objetivos Específicos}
+
+%% Los objetivos específicos son las metas medibles y alcanzables que
+%% componen el objetivo general. Entre 3 y 6 objetivos. Cada uno debe
+%% ser verificable: se puede confirmar si se cumplió o no.
+
+\begin{itemize}[label={\color{AzulITM}\textbf{>}}, leftmargin=1.8em, itemsep=5pt]
+  \item {[}Objetivo específico 1: acción concreta y verificable.{]}
+  \item {[}Objetivo específico 2: acción concreta y verificable.{]}
+  \item {[}Objetivo específico 3: acción concreta y verificable.{]}
+  \item {[}Agregar más objetivos según el alcance del proyecto.{]}
+\end{itemize}
+
+%% -----------------------------------------------------------------
+%% SECCIONES OPCIONALES — activar según proyecto (descomentar bloque)
+%% -----------------------------------------------------------------
+
+%% ── BLOQUE OPT-A: Marco Teórico ──────────────────────────────────
+%% Usar cuando el informe requiere fundamentación teórica o el lector
+%% no tiene formación técnica en el área del proyecto.
+%% Incluir: conceptos clave, estado del arte, normativas relevantes.
+%%
+%\section{Marco Teórico}
+%
+%\subsection{{[}Concepto o tecnología clave 1{]}}
+%{[}Definición y relevancia para el proyecto. 1--2 párrafos.{]}
+%
+%\subsection{{[}Concepto o tecnología clave 2{]}}
+%{[}Definición y relevancia para el proyecto. 1--2 párrafos.{]}
+
+%% ── BLOQUE OPT-B: Metodología ────────────────────────────────────
+%% Usar cuando el informe describe un proceso de desarrollo o
+%% investigación con fases bien definidas.
+%% Incluir: fases del proyecto, criterios de diseño, herramientas usadas.
+%%
+%\section{Metodología}
+%
+%{[}Descripción del enfoque metodológico adoptado (iterativo, en fases,
+%investigación-acción, etc.) y justificación de la elección.{]}
+%
+%\begin{enumerate}[leftmargin=1.8em, itemsep=4pt]
+%  \item \textbf{Fase 1 --- {[}Nombre{]}:} {[}Descripción de actividades.{]}
+%  \item \textbf{Fase 2 --- {[}Nombre{]}:} {[}Descripción de actividades.{]}
+%  \item \textbf{Fase 3 --- {[}Nombre{]}:} {[}Descripción de actividades.{]}
+%\end{enumerate}
+
+%% ── BLOQUE OPT-C: Desarrollo Técnico + Código ────────────────────
+%% Usar para documentar implementaciones con código fuente.
+%% Soporta Python y C++. Usar cajaDatos para envolver bloques de código.
+%%
+%\section{Desarrollo Técnico}
+%
+%\subsection{{[}Nombre del componente o módulo 1{]}}
+%{[}Descripción del componente: propósito, diseño e implementación.{]}
+%
+%\begin{tcolorbox}[cajaDatos]
+%\begin{lstlisting}[language=Python, caption={{[}Descripción del código{]}}]
+%# [Código de ejemplo — reemplazar con código real]
+%def ejemplo():
+%    pass
+%\end{lstlisting}
+%\end{tcolorbox}
+%
+%\subsection{{[}Nombre del componente o módulo 2{]}}
+%{[}Descripción del componente.{]}
+%
+%\begin{tcolorbox}[cajaDatos]
+%\begin{lstlisting}[language=C++]
+%// [Código en C++ — reemplazar con código real]
+%void setup() {
+%    // inicialización
+%}
+%\end{lstlisting}
+%\end{tcolorbox}
+
+%% ── BLOQUE OPT-D: Resultados con tabla de indicadores ────────────
+%% Usar para presentar métricas cuantitativas de desempeño.
+%% Incluir: indicador, meta establecida, valor logrado, % cumplimiento.
+%%
+%\section{Resultados}
+%
+%\begin{longtable}{p{4.2cm} >{\centering}p{2.2cm} >{\centering}p{2.2cm}
+%    >{\centering}p{2.2cm} p{3.2cm}}
+%\rowcolor{AzulITM}
+%\color{Blanco}\FuenteTitulo\small\bfseries Indicador &
+%\color{Blanco}\FuenteTitulo\small\bfseries Meta &
+%\color{Blanco}\FuenteTitulo\small\bfseries Logrado &
+%\color{Blanco}\FuenteTitulo\small\bfseries \% Cumpl. &
+%\color{Blanco}\FuenteTitulo\small\bfseries Observaciones \\
+%\endfirsthead
+%\rowcolor{white}
+%{[}Indicador 1{]} & {[}Meta{]} & {[}Valor obtenido{]} & {[}XX\%{]} & {[}Nota breve.{]} \\
+%\rowcolor{GrisClaro}
+%{[}Indicador 2{]} & {[}Meta{]} & {[}Valor obtenido{]} & {[}XX\%{]} & {[}Nota breve.{]} \\
+%\end{longtable}
+%
+%\begin{tcolorbox}[cajaResultado]
+%  {[}Síntesis de los resultados: se cumplieron / superaron / no se
+%  alcanzaron los indicadores. Mencione el resultado más relevante.{]}
+%\end{tcolorbox}
+
+%% ── BLOQUE OPT-E: Recomendaciones ───────────────────────────────
+%% Usar cuando el informe incluye sugerencias para el cliente o entidad.
+%% Ordenar las recomendaciones de mayor a menor prioridad.
+%%
+%\section{Recomendaciones}
+%
+%\begin{itemize}[label={\color{AzulITM}\textbf{>}}, leftmargin=1.8em, itemsep=4pt]
+%  \item {[}Recomendación 1: acción concreta, justificación breve.{]}
+%  \item {[}Recomendación 2: acción concreta, justificación breve.{]}
+%  \item {[}Recomendación 3: acción concreta, justificación breve.{]}
+%\end{itemize}
+
+%% ── BLOQUE OPT-F: Referencias Bibliográficas ─────────────────────
+%% Usar cuando el informe cita normas, artículos, datasheets o libros.
+%% Formato APA 7 preferido. Ordenar alfabéticamente por apellido.
+%%
+%\section{Referencias Bibliográficas}
+%
+%\begin{enumerate}[leftmargin=1.8em, itemsep=4pt]
+%  \item {[}Apellido, Inicial. (Año). \textit{Título}. Editorial / URL.{]}
+%  \item {[}Apellido, Inicial. (Año). \textit{Título}. Editorial / URL.{]}
+%\end{enumerate}
+
+%% ── BLOQUE OPT-G: Anexos ─────────────────────────────────────────
+%% Usar para material complementario: diagramas, tablas extensas,
+%% planos, especificaciones detalladas de hardware/software.
+%%
+%\appendix
+%\section{{[}Nombre del Anexo A{]}}
+%{[}Contenido del anexo A: diagrama, tabla, especificación, etc.{]}
+%
+%\section{{[}Nombre del Anexo B{]}}
+%{[}Contenido del anexo B.{]}
+
+%% -----------------------------------------------------------------
+%% 6. CONCLUSIONES
+%% -----------------------------------------------------------------
+\section{Conclusiones}
+
+%% Las conclusiones responden a los objetivos planteados.
+%% Estructura sugerida:
+%% - Párrafo 1: resultado global del proyecto (¿se cumplió el objetivo?).
+%% - Párrafo 2: hallazgos técnicos relevantes o lecciones aprendidas.
+%% - Párrafo 3 (opcional): proyección o continuidad del trabajo.
+%% Finalizar con cajaResultado que sintetice el juicio evaluativo.
+
+{\itshape\color{GrisMedio}%
+{[}Párrafo 1: valoración global del proyecto. ¿Se cumplieron los objetivos?
+¿Cuál fue el resultado principal? Relacionar con el objetivo general.{]}
+
+{[}Párrafo 2: hallazgos técnicos, limitaciones encontradas o aprendizajes
+relevantes que deben quedar documentados.{]}}
+
+\begin{tcolorbox}[cajaResultado]
+  {[}Síntesis evaluativa: el proyecto {[}cumplió / superó / no alcanzó{]}
+  los indicadores de desempeño establecidos. Se recomienda {[}acción
+  de seguimiento o próxima fase.{]}{]}
+\end{tcolorbox}
+
+%% -----------------------------------------------------------------
+%% 7. TABLA DE FIRMAS Y APROBACIÓN
+%% -----------------------------------------------------------------
+\section*{Firmas y Aprobación}
+\addcontentsline{toc}{section}{Firmas y Aprobación}
+
+%% Esta tabla es obligatoria. Los campos se rellenan automáticamente
+%% desde la Zona de Configuración. Verificar que DocAutor, DocRevisor,
+%% DocCargoAutor, DocCargoRevisor y DocFecha estén correctamente definidos.
+
+\vspace{1.5em}
+\noindent
+\begin{tabular}{p{7cm} p{1cm} p{7cm}}
+  \multicolumn{1}{c}{\textbf{\small\color{AzulITM}Elaborado por}} & &
+  \multicolumn{1}{c}{\textbf{\small\color{AzulITM}Revisado y aprobado por}} \\[0.8em]
+  \hline\\[-6pt]
+  {\small\color{GrisPizarra}\textbf{\DocAutor}} & &
+  {\small\color{GrisPizarra}\textbf{\DocRevisor}} \\[2pt]
+  {\small\color{GrisMedio}\DocCargoAutor} & &
+  {\small\color{GrisMedio}\DocCargoRevisor} \\[2pt]
+  {\small\color{GrisMedio}\DocEntidad} & &
+  {\small\color{GrisMedio}\DocEntidad} \\[2pt]
+  {\small\color{GrisMedio}\DocFecha} & &
+  {\small\color{GrisMedio}\DocFecha} \\
+\end{tabular}
+
+\end{document}
