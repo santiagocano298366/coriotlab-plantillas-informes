@@ -1,0 +1,487 @@
+%% ╔══════════════════════════════════════════════════════════════════╗
+%% ║         CORIOTLAB — INFORME TÉCNICO EXTERNO                     ║
+%% ║         Nivel consultoría profesional                           ║
+%% ╚══════════════════════════════════════════════════════════════════╝
+
+%% ═══════════════════════════════════════════════════════════════════
+%% ZONA DE CONFIGURACIÓN
+%% ═══════════════════════════════════════════════════════════════════
+\newcommand{\DocTitulo}{Sistema de Monitoreo Ambiental Distribuido para Laboratorio de Control}
+\newcommand{\DocSubtitulo}{Diseño, implementación y validación de una red IoT basada en ESP32 y MQTT}
+\newcommand{\DocNumero}{IT-2025-003}
+\newcommand{\DocProyecto}{Monitoreo Ambiental CORIOTLAB}
+\newcommand{\DocCodigo}{CORIOT-2025-MA-003}
+\newcommand{\DocCliente}{Laboratorio CORIOTLAB --- Facultad de Ingeniería, ITM}
+\newcommand{\DocPeriodo}{Enero --- Junio 2025}
+\newcommand{\DocLugar}{Medellín, Colombia}
+\newcommand{\DocVersion}{1.2}
+\newcommand{\DocFecha}{19 de junio de 2025}
+\newcommand{\DocConfidencialidad}{Uso interno --- CORIOTLAB}
+\newcommand{\DocAutor}{Santiago Leal}
+\newcommand{\DocCargoAutor}{Investigador Principal --- CORIOTLAB}
+\newcommand{\DocRevisor}{Dr. Nombre Apellido}
+\newcommand{\DocCargoRevisor}{Director de Laboratorio --- CORIOTLAB}
+\newcommand{\DocEntidad}{CORIOTLAB --- ITM}
+%% ═══════════════════════════════════════════════════════════════════
+
+\documentclass[12pt, letterpaper]{article}
+
+%% --- Codificación y lenguaje
+\usepackage[spanish, es-nodecimaldot, es-noshorthands]{babel}
+
+%% --- Fuentes (XeLaTeX --- por nombre de familia Windows)
+\usepackage{fontspec}
+\setmainfont{Inter}
+\newfontfamily\FuenteTitulo{MuseoModerno}
+\newfontfamily\FuenteCodigo{Space Mono}
+
+%% --- Geometría
+\usepackage[
+  top=2.8cm, bottom=2.8cm,
+  left=2.5cm, right=2.5cm,
+  headheight=1.8cm
+]{geometry}
+
+%% --- Color
+\usepackage[table]{xcolor}
+\definecolor{AzulITM}     {HTML}{102D69}
+\definecolor{Magenta}     {HTML}{C14894}
+\definecolor{AzulDigital} {HTML}{56ACDE}
+\definecolor{GrisPizarra} {HTML}{2F2F2F}
+\definecolor{GrisClaro}   {HTML}{F2F2F2}
+\definecolor{GrisMedio}   {HTML}{AAAAAA}
+\definecolor{GrisLinea}   {HTML}{DDDDDD}
+\definecolor{Blanco}      {HTML}{FFFFFF}
+
+%% --- Gráficos
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{eso-pic}
+
+%% --- Encabezado / pie
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+
+%% --- Tablas
+\usepackage{longtable}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{colortbl}
+\usepackage{multirow}
+
+%% --- Listas
+\usepackage{enumitem}
+
+%% --- Cajas
+\usepackage[most]{tcolorbox}
+
+%% --- Código
+\usepackage{listings}
+
+%% --- TOC y secciones
+\usepackage{titlesec}
+\usepackage{titletoc}
+\usepackage[hidelinks]{hyperref}
+
+%% --- Espaciado
+\usepackage{parskip}
+\setlength{\parskip}{6pt}
+
+%% -----------------------------------------------------------------
+%% MEMBRETE DE FONDO
+%% -----------------------------------------------------------------
+\AddToShipoutPictureBG{%
+  \begin{tikzpicture}[remember picture, overlay]
+    \node[opacity=0.08] at (current page.center) {%
+      \includegraphics[width=\paperwidth, height=\paperheight,
+        keepaspectratio=false]%
+        {../../membretes/membrete_azul.png}%
+    };
+  \end{tikzpicture}%
+}
+
+%% -----------------------------------------------------------------
+%% ENCABEZADO Y PIE
+%% -----------------------------------------------------------------
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{%
+  {\FuenteTitulo\small\color{AzulITM}\textbf{CORIOTLAB}}%
+  {\color{GrisMedio}\small\ \ |\ \ }%
+  {\small\color{GrisPizarra}Informe Técnico}%
+}
+\fancyhead[R]{{\small\color{GrisMedio}\DocNumero}}
+\fancyfoot[L]{{\footnotesize\color{GrisMedio}www.coriotlab.co\ \ |\ \ info@coriotlab.co}}
+\fancyfoot[C]{{\footnotesize\color{GrisMedio}\DocFecha}}
+\fancyfoot[R]{{\footnotesize\color{GrisMedio}Página \thepage\ de \pageref{LastPage}}}
+\renewcommand{\footrulewidth}{0.4pt}
+\renewcommand{\footrule}{%
+  {\color{GrisLinea}\rule{\headwidth}{0.4pt}}\vskip 4pt}
+\renewcommand{\headrulewidth}{1.2pt}
+\renewcommand{\headrule}{%
+  \vspace{2pt}{\color{AzulITM}\rule{\headwidth}{1.2pt}}}
+
+%% -----------------------------------------------------------------
+%% SECCIONES
+%% -----------------------------------------------------------------
+\titleformat{\section}
+  {\FuenteTitulo\large\color{AzulITM}\bfseries}
+  {\thesection.}{0.5em}{}[{\color{AzulITM}\titlerule[0.8pt]}]
+\titleformat{\subsection}
+  {\FuenteTitulo\normalsize\color{GrisPizarra}\bfseries}
+  {\thesubsection.}{0.5em}{}
+\titleformat{\subsubsection}
+  {\normalsize\color{GrisPizarra}\bfseries\itshape}
+  {\thesubsubsection.}{0.5em}{}
+
+%% -----------------------------------------------------------------
+%% CAJAS tcolorbox
+%% -----------------------------------------------------------------
+\tcbset{
+  cajaNota/.style={
+    colback=AzulDigital!10, colframe=AzulDigital,
+    fonttitle=\FuenteTitulo\small\bfseries, coltitle=white,
+    boxrule=0pt, leftrule=4pt, title=Nota,
+    left=8pt, top=6pt, bottom=6pt
+  },
+  cajaAlerta/.style={
+    colback=Magenta!8, colframe=Magenta,
+    fonttitle=\FuenteTitulo\small\bfseries, coltitle=white,
+    boxrule=0pt, leftrule=4pt, title=Advertencia,
+    left=8pt, top=6pt, bottom=6pt
+  },
+  cajaResultado/.style={
+    colback=AzulITM!8, colframe=AzulITM,
+    fonttitle=\FuenteTitulo\small\bfseries, coltitle=white,
+    boxrule=0pt, leftrule=4pt, title=Resultado,
+    left=8pt, top=6pt, bottom=6pt
+  },
+  cajaDatos/.style={
+    colback=GrisClaro, colframe=GrisLinea,
+    boxrule=0.6pt, left=8pt, top=6pt, bottom=6pt
+  },
+  cajaResumen/.style={
+    colback=AzulITM!6, colframe=AzulITM,
+    fonttitle=\FuenteTitulo\normalsize\bfseries, coltitle=white,
+    boxrule=1pt, title=Resumen Ejecutivo,
+    left=10pt, right=10pt, top=8pt, bottom=8pt
+  }
+}
+
+%% -----------------------------------------------------------------
+%% CÓDIGO lstlisting
+%% -----------------------------------------------------------------
+\lstdefinestyle{coriotcode}{
+  basicstyle=\FuenteCodigo\small,
+  backgroundcolor=\color{GrisClaro},
+  commentstyle=\color{GrisMedio}\itshape,
+  keywordstyle=\color{AzulITM}\bfseries,
+  stringstyle=\color{Magenta},
+  numberstyle=\tiny\color{GrisMedio},
+  numbers=left, numbersep=10pt,
+  breaklines=true, frame=none,
+  tabsize=2, showstringspaces=false
+}
+\lstset{style=coriotcode}
+
+%% =================================================================
+%%  INICIO DEL DOCUMENTO
+%% =================================================================
+\begin{document}
+
+%% -----------------------------------------------------------------
+%% 1. PORTADA
+%% -----------------------------------------------------------------
+\thispagestyle{empty}
+\begin{tikzpicture}[remember picture, overlay]
+  \fill[AzulITM] (current page.north west)
+    rectangle ([yshift=-5cm] current page.north east);
+  \node[anchor=west, text=white] at
+    ([xshift=2.5cm, yshift=-1.6cm] current page.north west)
+    {\FuenteTitulo\large\textbf{Informe Técnico}};
+  \node[anchor=east, text=AzulDigital] at
+    ([xshift=-2.5cm, yshift=-1.6cm] current page.north east)
+    {\FuenteTitulo\Large\textbf{\DocNumero}};
+  \draw[AzulDigital, line width=2pt]
+    ([yshift=-5cm] current page.north west) --
+    ([yshift=-5cm] current page.north east);
+\end{tikzpicture}
+\vspace{4.2cm}
+
+\begin{center}
+  {\FuenteTitulo\huge\color{AzulITM}\textbf{\DocTitulo}}\\[0.8em]
+  {\FuenteTitulo\large\color{GrisPizarra}\DocSubtitulo}\\[2.4em]
+  {\color{GrisLinea}\rule{\linewidth}{0.8pt}}\\[1.4em]
+  \begin{tabular}{@{}ll@{}}
+    {\small\color{GrisMedio}Proyecto:}          & {\small\color{GrisPizarra}\DocProyecto} \\[4pt]
+    {\small\color{GrisMedio}Código:}            & {\small\color{GrisPizarra}\DocCodigo} \\[4pt]
+    {\small\color{GrisMedio}Cliente / Entidad:} & {\small\color{GrisPizarra}\DocCliente} \\[4pt]
+    {\small\color{GrisMedio}Período:}           & {\small\color{GrisPizarra}\DocPeriodo} \\[4pt]
+    {\small\color{GrisMedio}Lugar:}             & {\small\color{GrisPizarra}\DocLugar} \\[4pt]
+    {\small\color{GrisMedio}Versión:}           & {\small\color{GrisPizarra}\DocVersion} \\[4pt]
+    {\small\color{GrisMedio}Fecha:}             & {\small\color{GrisPizarra}\DocFecha} \\[4pt]
+    {\small\color{GrisMedio}Confidencialidad:}  & {\small\color{GrisPizarra}\DocConfidencialidad} \\
+  \end{tabular}\\[2em]
+  \begin{tcolorbox}[cajaResumen, width=\linewidth]
+    El presente informe documenta el diseño, implementación y validación de una red
+    de monitoreo ambiental distribuida para el laboratorio CORIOTLAB del ITM,
+    basada en microcontroladores ESP32 con sensores BME280 y comunicación MQTT.
+    Se implementaron 8 nodos de sensado que reportan temperatura, humedad y presión
+    a un servidor central con almacenamiento en InfluxDB y visualización en Grafana.
+    Los resultados muestran una precisión de $\pm$0.5\,°C y disponibilidad del 98.7\%
+    durante el período de evaluación.
+  \end{tcolorbox}
+\end{center}
+\newpage
+
+%% -----------------------------------------------------------------
+%% 2. CONTROL DE VERSIONES
+%% -----------------------------------------------------------------
+\section*{Control de Versiones}
+\addcontentsline{toc}{section}{Control de Versiones}
+
+\setlength{\LTpre}{4pt}\setlength{\LTpost}{4pt}
+\begin{longtable}{
+  >{\centering\arraybackslash}p{1.4cm}
+  >{\centering\arraybackslash}p{2.6cm}
+  p{3.8cm}
+  p{6.4cm}
+}
+\rowcolor{AzulITM}
+\color{Blanco}\FuenteTitulo\small\bfseries Versión &
+\color{Blanco}\FuenteTitulo\small\bfseries Fecha &
+\color{Blanco}\FuenteTitulo\small\bfseries Autor &
+\color{Blanco}\FuenteTitulo\small\bfseries Descripción del cambio \\
+\endfirsthead
+\rowcolor{AzulITM}
+\color{Blanco}\FuenteTitulo\small\bfseries Versión &
+\color{Blanco}\FuenteTitulo\small\bfseries Fecha &
+\color{Blanco}\FuenteTitulo\small\bfseries Autor &
+\color{Blanco}\FuenteTitulo\small\bfseries Descripción del cambio \\
+\endhead
+\rowcolor{white}
+1.0 & 15/04/2025 & \DocAutor & Versión inicial --- diseño de arquitectura y selección de hardware. \\
+\rowcolor{GrisClaro}
+1.1 & 02/06/2025 & \DocAutor & Inclusión de resultados de pruebas de campo y ajustes de firmware. \\
+\rowcolor{white}
+1.2 & 19/06/2025 & \DocAutor & Versión final --- incorporación de análisis de disponibilidad y firmas. \\
+\end{longtable}
+
+%% -----------------------------------------------------------------
+%% 3. TABLA DE CONTENIDO
+%% -----------------------------------------------------------------
+\newpage
+\tableofcontents
+\newpage
+
+%% -----------------------------------------------------------------
+%% 4. INTRODUCCIÓN
+%% -----------------------------------------------------------------
+\section{Introducción}
+
+El Laboratorio CORIOTLAB del Instituto Tecnológico Metropolitano (ITM) desarrolla actividades de investigación y docencia en las áreas de Control, Robótica e Internet de las Cosas (IoT). La gestión eficiente del entorno físico del laboratorio constituye un requisito operativo esencial para garantizar condiciones óptimas en los equipos electrónicos y experimentos de precisión.
+
+Este informe presenta el proceso completo de diseño e implementación de un sistema de monitoreo ambiental distribuido basado en una red de sensores inalámbricos (WSN) con microcontroladores ESP32 y comunicación MQTT. El sistema permite supervisar en tiempo real las variables de temperatura, humedad relativa y presión barométrica en ocho puntos estratégicos del laboratorio.
+
+\begin{tcolorbox}[cajaDatos]
+  \textbf{Alcance del documento:} Cubre las fases de diseño de arquitectura, selección de hardware, desarrollo de firmware, integración con la plataforma de datos y validación de resultados durante el período \DocPeriodo.
+\end{tcolorbox}
+
+%% -----------------------------------------------------------------
+%% 5. OBJETIVOS
+%% -----------------------------------------------------------------
+\section{Objetivos}
+
+\subsection{Objetivo General}
+
+Diseñar e implementar un sistema de monitoreo ambiental distribuido de bajo costo para el CORIOTLAB, capaz de recolectar, transmitir, almacenar y visualizar datos de temperatura, humedad y presión en tiempo real con alta disponibilidad.
+
+\subsection{Objetivos Específicos}
+
+\begin{itemize}[label={\color{AzulITM}\textbf{>}}, leftmargin=1.8em, itemsep=5pt]
+  \item Seleccionar y caracterizar el hardware de sensado y comunicación más adecuado para las condiciones del laboratorio.
+  \item Desarrollar el firmware de los nodos ESP32 para la lectura de sensores y publicación MQTT con soporte de reconexión automática.
+  \item Configurar la infraestructura de datos (broker MQTT, InfluxDB, Grafana) en servidor local.
+  \item Validar el sistema durante un período mínimo de 30 días con disponibilidad objetivo $\geq$\,97\%.
+  \item Documentar el proceso para facilitar la replicación del sistema en otros espacios del ITM.
+\end{itemize}
+
+%% -----------------------------------------------------------------
+%% SECCIONES OPCIONALES — activar según proyecto
+%% -----------------------------------------------------------------
+
+%% ── BLOQUE OPT-A: Marco Teórico ──
+%\section{Marco Teórico}
+%
+%\subsection{Internet de las Cosas (IoT)}
+%El paradigma IoT permite la interconexión de dispositivos físicos con capacidades
+%de sensado, procesamiento y comunicación...
+%
+%\subsection{Protocolo MQTT}
+%MQTT (Message Queuing Telemetry Transport) es un protocolo de mensajería
+%ligero basado en el modelo publicador/suscriptor...
+
+%% ── BLOQUE OPT-B: Metodología ──
+%\section{Metodología}
+%
+%El proyecto siguió una metodología de desarrollo iterativo en cuatro fases:
+%\begin{enumerate}[leftmargin=1.8em, itemsep=4pt]
+%  \item \textbf{Fase 1 --- Diseño:} Definición de arquitectura, selección de componentes y prototipado.
+%  \item \textbf{Fase 2 --- Implementación:} Desarrollo de firmware y configuración de infraestructura.
+%  \item \textbf{Fase 3 --- Integración:} Despliegue de los 8 nodos y pruebas de conectividad.
+%  \item \textbf{Fase 4 --- Validación:} Evaluación de precisión, disponibilidad y rendimiento.
+%\end{enumerate}
+
+%% ── BLOQUE OPT-C: Desarrollo Técnico + Código ──
+%\section{Desarrollo Técnico}
+%
+%\subsection{Arquitectura del Sistema}
+%La arquitectura implementada sigue un patrón de tres capas...
+%
+%\subsection{Firmware del nodo ESP32}
+%
+%El siguiente fragmento muestra la rutina principal de publicación MQTT en MicroPython:
+%
+%\begin{tcolorbox}[cajaDatos]
+%\begin{lstlisting}[language=Python, caption={Publicación MQTT con reconexión automática}]
+%from umqtt.simple import MQTTClient
+%from machine import Pin, I2C
+%import bme280, json, time
+%
+%BROKER = "192.168.1.100"
+%TOPIC  = b"coriot/nodo1/ambiental"
+%
+%def publicar(client, sensor):
+%    t, p, h = sensor.read_compensated_data()
+%    payload = json.dumps({"temp": t/100, "hum": h/1024, "pres": p/25600})
+%    client.publish(TOPIC, payload.encode(), qos=1)
+%
+%i2c = I2C(0, sda=Pin(21), scl=Pin(22), freq=400000)
+%sensor = bme280.BME280(i2c=i2c)
+%client = MQTTClient("nodo1", BROKER)
+%client.connect()
+%
+%while True:
+%    try:
+%        publicar(client, sensor)
+%    except Exception:
+%        client.connect()  # reconexion automatica
+%    time.sleep(5)
+%\end{lstlisting}
+%\end{tcolorbox}
+%
+%\textit{\small\color{GrisMedio}Ejemplo de configuración de servidor en C++ con Arduino para comunicación serial:}
+%
+%\begin{tcolorbox}[cajaDatos]
+%\begin{lstlisting}[language=C++]
+%#include <PubSubClient.h>
+%#include <WiFi.h>
+%
+%WiFiClient espClient;
+%PubSubClient client(espClient);
+%
+%void setup() {
+%    WiFi.begin(SSID, PASSWORD);
+%    client.setServer(BROKER_IP, 1883);
+%    client.connect("esp32_node1");
+%}
+%\end{lstlisting}
+%\end{tcolorbox}
+
+%% ── BLOQUE OPT-D: Resultados con tabla de indicadores ──
+%\section{Resultados}
+%
+%\begin{longtable}{p{4.2cm} >{\centering}p{2.2cm} >{\centering}p{2.2cm}
+%    >{\centering}p{2.2cm} p{3.2cm}}
+%\rowcolor{AzulITM}
+%\color{Blanco}\FuenteTitulo\small\bfseries Indicador &
+%\color{Blanco}\FuenteTitulo\small\bfseries Meta &
+%\color{Blanco}\FuenteTitulo\small\bfseries Logrado &
+%\color{Blanco}\FuenteTitulo\small\bfseries \% Cumpl. &
+%\color{Blanco}\FuenteTitulo\small\bfseries Observaciones \\
+%\endfirsthead
+%\rowcolor{white}
+%Disponibilidad del sistema & $\geq$97\% & 98.7\% & 101.8\% & Supera la meta establecida. \\
+%\rowcolor{GrisClaro}
+%Precisión temperatura & $\pm$1\,°C & $\pm$0.5\,°C & 100\% & Validada con termómetro patrón. \\
+%\rowcolor{white}
+%Latencia de reporte & $\leq$10\,s & 5.2\,s & 100\% & Promedio de 72h de operación. \\
+%\rowcolor{GrisClaro}
+%Nodos activos & 8 & 8 & 100\% & Todos los nodos operativos. \\
+%\end{longtable}
+%
+%\begin{tcolorbox}[cajaResultado]
+%  El sistema alcanzó una disponibilidad del 98.7\%, superando el objetivo del 97\%.
+%  La precisión de $\pm$0.5\,°C fue validada contra un termómetro de referencia NIST.
+%\end{tcolorbox}
+
+%% ── BLOQUE OPT-E: Recomendaciones ──
+%\section{Recomendaciones}
+%
+%\begin{tcolorbox}[cajaNota]
+%  Se recomienda implementar cifrado TLS en el canal MQTT antes de conectar el
+%  sistema a redes externas. El certificado debe ser gestionado por la Dirección
+%  de Sistemas del ITM.
+%\end{tcolorbox}
+%
+%\begin{itemize}[label={\color{AzulITM}\textbf{>}}, leftmargin=1.8em, itemsep=4pt]
+%  \item Ampliar la red de nodos a 16 puntos para cubrir la sala de proyectos.
+%  \item Configurar alertas automáticas por correo cuando la temperatura supere 28\,°C.
+%  \item Realizar calibración semestral de los sensores BME280.
+%\end{itemize}
+
+%% ── BLOQUE OPT-F: Referencias ──
+%\section{Referencias Bibliográficas}
+%
+%\begin{enumerate}[leftmargin=1.8em, itemsep=4pt]
+%  \item OASIS. (2019). \textit{MQTT Version 5.0}. OASIS Standard.
+%  \item Bosch Sensortec. (2023). \textit{BME280 Datasheet}. Rev. 1.6.
+%  \item InfluxData. (2024). \textit{InfluxDB Documentation v2.7}.
+%\end{enumerate}
+
+%% ── BLOQUE OPT-G: Anexos ──
+%\appendix
+%\section{Diagrama de Arquitectura}
+%\textit{[Insertar diagrama aquí]}
+%
+%\section{Especificaciones de Hardware}
+%\textit{[Tabla de componentes]}
+
+%% -----------------------------------------------------------------
+%% 6. CONCLUSIONES
+%% -----------------------------------------------------------------
+\section{Conclusiones}
+
+El sistema de monitoreo ambiental distribuido implementado en el CORIOTLAB demostró ser una solución viable, eficiente y de bajo costo para la supervisión continua de las condiciones del laboratorio. Los ocho nodos ESP32 operan de manera autónoma con reconexión automática ante fallos de red, garantizando una disponibilidad del 98.7\% durante el período de evaluación.
+
+La integración con la plataforma InfluxDB-Grafana permite visualizar las variables ambientales en tiempo real y genera históricos para análisis posteriores. La arquitectura modular facilita la escalabilidad horizontal del sistema sin modificaciones al firmware existente.
+
+\begin{tcolorbox}[cajaResultado]
+  El proyecto cumple o supera todos los indicadores de desempeño establecidos.
+  Se recomienda proceder con la fase de expansión a 16 nodos en el próximo período.
+\end{tcolorbox}
+
+%% -----------------------------------------------------------------
+%% 7. TABLA DE FIRMAS Y APROBACIÓN
+%% -----------------------------------------------------------------
+\section*{Firmas y Aprobación}
+\addcontentsline{toc}{section}{Firmas y Aprobación}
+
+\vspace{1.5em}
+\noindent
+\begin{tabular}{p{7cm} p{1cm} p{7cm}}
+  %% Columna izquierda
+  \multicolumn{1}{c}{\textbf{\small\color{AzulITM}Elaborado por}} & &
+  \multicolumn{1}{c}{\textbf{\small\color{AzulITM}Revisado y aprobado por}} \\[0.8em]
+  \hline\\[-6pt]
+  {\small\color{GrisPizarra}\textbf{\DocAutor}} & &
+  {\small\color{GrisPizarra}\textbf{\DocRevisor}} \\[2pt]
+  {\small\color{GrisMedio}\DocCargoAutor} & &
+  {\small\color{GrisMedio}\DocCargoRevisor} \\[2pt]
+  {\small\color{GrisMedio}\DocEntidad} & &
+  {\small\color{GrisMedio}\DocEntidad} \\[2pt]
+  {\small\color{GrisMedio}\DocFecha} & &
+  {\small\color{GrisMedio}\DocFecha} \\
+\end{tabular}
+
+\end{document}

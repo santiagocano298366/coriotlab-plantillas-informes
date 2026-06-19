@@ -1,0 +1,38 @@
+# Archivos auxiliares de LaTeX
+*.aux
+*.log
+*.out
+*.toc
+*.lof
+*.lot
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.bbl
+*.blg
+*.idx
+*.ilg
+*.ind
+*.nav
+*.snm
+*.vrb
+*.bcf
+*.run.xml
+*.xdv
+
+# PDFs compilados (se regeneran con compile.ps1)
+output/**/*.pdf
+
+# Archivos de prueba temporales
+informes/**/test_*.tex
+informes/**/test_*.pdf
+informes/**/test_*.log
+informes/**/test_*.aux
+
+# Sistema operativo
+Thumbs.db
+.DS_Store
+desktop.ini
+
+# Claude Code temporales
+.claude/settings.local.json

@@ -1,0 +1,453 @@
+%% ╔══════════════════════════════════════════════════════════════════╗
+%% ║         CORIOTLAB — INFORME DE ACTIVIDADES                      ║
+%% ║         Documento interno · flexible                            ║
+%% ║         Dos variantes: PERIÓDICO y GUÍA                        ║
+%% ╚══════════════════════════════════════════════════════════════════╝
+
+%% ═══════════════════════════════════════════════════════════════════
+%% ZONA DE CONFIGURACIÓN — editar aquí antes de compilar
+%% ═══════════════════════════════════════════════════════════════════
+
+%% VARIANTE ACTIVA: "periodico" o "guia"
+\newcommand{\TipoVariante}{periodico}
+
+%% Período (solo para variante periódico): Semanal | Quincenal | Mensual
+\newcommand{\TipoPeriodo}{Semanal}
+
+%% Campos comunes
+\newcommand{\DocTitulo}{Sistema de Monitoreo IoT con ESP32}
+\newcommand{\DocNumero}{IA-2025-007}
+\newcommand{\DocAutor}{Santiago Leal}
+\newcommand{\DocCargo}{Investigador --- CORIOTLAB}
+\newcommand{\DocProyecto}{Proyecto de Monitoreo Ambiental}
+\newcommand{\DocPeriodo}{16 al 20 de junio de 2025}
+\newcommand{\DocFecha}{\today}
+\newcommand{\DocVersion}{1.0}
+
+%% ═══════════════════════════════════════════════════════════════════
+
+\documentclass[12pt, letterpaper]{article}
+
+%% --- Codificación y lenguaje
+\usepackage[spanish, es-nodecimaldot, es-noshorthands]{babel}
+
+%% --- Fuentes (XeLaTeX --- cargar por nombre de familia Windows)
+\usepackage{fontspec}
+\setmainfont{Inter}
+\newfontfamily\FuenteTitulo{MuseoModerno}
+\newfontfamily\FuenteCodigo{Space Mono}
+
+%% --- Geometría
+\usepackage[
+  top=2.8cm, bottom=2.8cm,
+  left=2.5cm, right=2.5cm,
+  headheight=1.8cm
+]{geometry}
+
+%% --- Color
+\usepackage[table]{xcolor}
+\definecolor{AzulITM}     {HTML}{102D69}
+\definecolor{Magenta}     {HTML}{C14894}
+\definecolor{AzulDigital} {HTML}{56ACDE}
+\definecolor{GrisPizarra} {HTML}{2F2F2F}
+\definecolor{GrisClaro}   {HTML}{F2F2F2}
+\definecolor{GrisMedio}   {HTML}{AAAAAA}
+\definecolor{GrisLinea}   {HTML}{DDDDDD}
+\definecolor{Blanco}      {HTML}{FFFFFF}
+\definecolor{VerdeTarea}  {HTML}{1A5C35}
+
+%% --- Gráficos y membrete
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{eso-pic}
+
+%% --- Encabezado y pie
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+
+%% --- Tablas
+\usepackage{longtable}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{colortbl}
+\usepackage{multirow}
+
+%% --- Listas
+\usepackage{enumitem}
+
+%% --- Cajas
+\usepackage[most]{tcolorbox}
+
+%% --- Código
+\usepackage{listings}
+
+%% --- Hipervínculos
+\usepackage[hidelinks]{hyperref}
+
+%% --- Espaciado de párrafos
+\usepackage{parskip}
+\setlength{\parskip}{6pt}
+
+%% -----------------------------------------------------------------
+%% MEMBRETE DE FONDO (8% opacidad en todas las páginas)
+%% -----------------------------------------------------------------
+\AddToShipoutPictureBG{%
+  \begin{tikzpicture}[remember picture, overlay]
+    \node[opacity=0.08] at (current page.center) {%
+      \includegraphics[width=\paperwidth, height=\paperheight,
+        keepaspectratio=false]%
+        {../../membretes/membrete_azul.png}%
+    };
+  \end{tikzpicture}%
+}
+
+%% -----------------------------------------------------------------
+%% ENCABEZADO Y PIE DE PÁGINA
+%% -----------------------------------------------------------------
+\pagestyle{fancy}
+\fancyhf{}
+
+\fancyhead[L]{%
+  {\FuenteTitulo\small\color{AzulITM}\textbf{CORIOTLAB}}%
+  {\color{GrisMedio}\small\ \ |\ \ }%
+  {\small\color{GrisPizarra}\DocTitulo}%
+}
+\fancyhead[R]{%
+  {\small\color{GrisMedio}\DocNumero}%
+}
+\fancyfoot[L]{%
+  {\footnotesize\color{GrisMedio}www.coriotlab.co\ \ |\ \ info@coriotlab.co}%
+}
+\fancyfoot[C]{%
+  {\footnotesize\color{GrisMedio}\DocFecha}%
+}
+\fancyfoot[R]{%
+  {\footnotesize\color{GrisMedio}Página \thepage\ de \pageref{LastPage}}%
+}
+
+\renewcommand{\footrulewidth}{0.4pt}
+\renewcommand{\footrule}{%
+  {\color{GrisLinea}\rule{\headwidth}{0.4pt}}%
+  \vskip 4pt%
+}
+\renewcommand{\headrulewidth}{1.2pt}
+\renewcommand{\headrule}{%
+  \vspace{2pt}%
+  {\color{AzulITM}\rule{\headwidth}{1.2pt}}%
+}
+
+%% -----------------------------------------------------------------
+%% ESTILOS DE SECCIONES
+%% -----------------------------------------------------------------
+\usepackage{titlesec}
+\titleformat{\section}
+  {\FuenteTitulo\large\color{AzulITM}\bfseries}
+  {\thesection.}{0.5em}{}[{\color{AzulITM}\titlerule[0.8pt]}]
+
+\titleformat{\subsection}
+  {\FuenteTitulo\normalsize\color{GrisPizarra}\bfseries}
+  {\thesubsection.}{0.5em}{}
+
+%% -----------------------------------------------------------------
+%% MACRO: PORTADA
+%% -----------------------------------------------------------------
+\newcommand{\PortadaActividades}[2]{%
+  \thispagestyle{empty}
+  \begin{tikzpicture}[remember picture, overlay]
+    \fill[AzulITM] (current page.north west)
+      rectangle ([yshift=-4.5cm] current page.north east);
+    \node[anchor=west, text=white] at
+      ([xshift=2.5cm, yshift=-1.5cm] current page.north west)
+      {\FuenteTitulo\large\textbf{#1}};
+    \node[anchor=east, text=AzulDigital] at
+      ([xshift=-2.5cm, yshift=-1.5cm] current page.north east)
+      {\FuenteTitulo\Large\textbf{#2}};
+    \draw[AzulDigital, line width=2pt]
+      ([yshift=-4.5cm] current page.north west) --
+      ([yshift=-4.5cm] current page.north east);
+  \end{tikzpicture}%
+  \vspace{3.8cm}
+
+  \begin{center}
+    {\FuenteTitulo\Huge\color{AzulITM}\textbf{\DocTitulo}}\\[0.6em]
+    {\FuenteTitulo\large\color{GrisPizarra}\DocProyecto}\\[2em]
+    {\color{GrisLinea}\rule{\linewidth}{0.6pt}}\\[1.2em]
+    \begin{tabular}{ll}
+      {\small\color{GrisMedio}Autor:}   & {\small\color{GrisPizarra}\DocAutor} \\[3pt]
+      {\small\color{GrisMedio}Cargo:}   & {\small\color{GrisPizarra}\DocCargo} \\[3pt]
+      {\small\color{GrisMedio}Período:} & {\small\color{GrisPizarra}\DocPeriodo} \\[3pt]
+      {\small\color{GrisMedio}Versión:} & {\small\color{GrisPizarra}\DocVersion} \\[3pt]
+      {\small\color{GrisMedio}Fecha:}   & {\small\color{GrisPizarra}\DocFecha} \\
+    \end{tabular}
+  \end{center}
+  \newpage
+}
+
+%% -----------------------------------------------------------------
+%% MACRO: ESTADO DE TAREA
+%% -----------------------------------------------------------------
+\newcommand{\EstadoCompletado}{%
+  \textcolor{VerdeTarea}{\small\textbf{Completado}}}
+\newcommand{\EstadoEnCurso}{%
+  \textcolor{AzulITM}{\small\textbf{En curso}}}
+\newcommand{\EstadoPendiente}{%
+  \textcolor{GrisMedio}{\small\textbf{Pendiente}}}
+\newcommand{\EstadoBloqueado}{%
+  \textcolor{Magenta}{\small\textbf{Bloqueado}}}
+
+%% -----------------------------------------------------------------
+%% CAJAS tcolorbox
+%% -----------------------------------------------------------------
+\tcbset{
+  cajaNota/.style={
+    colback=AzulDigital!10, colframe=AzulDigital,
+    fonttitle=\FuenteTitulo\small\bfseries,
+    coltitle=white, boxrule=0pt, leftrule=4pt,
+    title=Nota, left=8pt, top=6pt, bottom=6pt
+  },
+  cajaAlerta/.style={
+    colback=Magenta!8, colframe=Magenta,
+    fonttitle=\FuenteTitulo\small\bfseries,
+    coltitle=white, boxrule=0pt, leftrule=4pt,
+    title=Advertencia, left=8pt, top=6pt, bottom=6pt
+  },
+  cajaResultado/.style={
+    colback=AzulITM!8, colframe=AzulITM,
+    fonttitle=\FuenteTitulo\small\bfseries,
+    coltitle=white, boxrule=0pt, leftrule=4pt,
+    title=Resultado, left=8pt, top=6pt, bottom=6pt
+  },
+  cajaDatos/.style={
+    colback=GrisClaro, colframe=GrisLinea,
+    boxrule=0.6pt, left=8pt, top=6pt, bottom=6pt
+  }
+}
+
+%% -----------------------------------------------------------------
+%% CÓDIGO lstlisting
+%% -----------------------------------------------------------------
+\lstdefinestyle{coriotcode}{
+  basicstyle=\FuenteCodigo\small,
+  backgroundcolor=\color{GrisClaro},
+  commentstyle=\color{GrisMedio}\itshape,
+  keywordstyle=\color{AzulITM}\bfseries,
+  stringstyle=\color{Magenta},
+  numberstyle=\tiny\color{GrisMedio},
+  numbers=left, numbersep=10pt,
+  breaklines=true, breakatwhitespace=false,
+  frame=none, tabsize=2,
+  showstringspaces=false
+}
+\lstset{style=coriotcode}
+
+%% -----------------------------------------------------------------
+%% MACRO: FIRMA SIMPLE
+%% -----------------------------------------------------------------
+\newcommand{\FirmaSimple}{%
+  \vspace{2.5em}
+  \noindent
+  \begin{tabular}{p{7cm}}
+    \hline\\[-6pt]
+    {\small\color{GrisPizarra}\DocAutor}\\
+    {\small\color{GrisMedio}\DocCargo}\\
+    {\small\color{GrisMedio}CORIOTLAB --- ITM}\\
+    {\small\color{GrisMedio}\DocFecha}
+  \end{tabular}
+}
+
+%% =================================================================
+%%  INICIO DEL DOCUMENTO
+%% =================================================================
+\begin{document}
+
+%% -----------------------------------------------------------------
+%% === VARIANTE A: PERIÓDICO === descomenta esta sección ===
+%% -----------------------------------------------------------------
+
+\PortadaActividades{Informe \TipoPeriodo}{\DocNumero}
+
+\section{Registro de Actividades}
+
+\setlength{\LTpre}{6pt}
+\setlength{\LTpost}{6pt}
+
+\begin{longtable}{
+  >{\centering\arraybackslash}p{0.55cm}
+  p{3.4cm}
+  p{5.6cm}
+  >{\centering\arraybackslash}p{1.6cm}
+  >{\centering\arraybackslash}p{0.9cm}
+  >{\centering\arraybackslash}p{2.2cm}
+}
+\rowcolor{AzulITM}
+\color{Blanco}\FuenteTitulo\small\bfseries N\textsuperscript{o} &
+\color{Blanco}\FuenteTitulo\small\bfseries Actividad &
+\color{Blanco}\FuenteTitulo\small\bfseries Descripción &
+\color{Blanco}\FuenteTitulo\small\bfseries Fecha &
+\color{Blanco}\FuenteTitulo\small\bfseries Hrs &
+\color{Blanco}\FuenteTitulo\small\bfseries Estado \\
+\endfirsthead
+\rowcolor{AzulITM}
+\color{Blanco}\FuenteTitulo\small\bfseries N\textsuperscript{o} &
+\color{Blanco}\FuenteTitulo\small\bfseries Actividad &
+\color{Blanco}\FuenteTitulo\small\bfseries Descripción &
+\color{Blanco}\FuenteTitulo\small\bfseries Fecha &
+\color{Blanco}\FuenteTitulo\small\bfseries Hrs &
+\color{Blanco}\FuenteTitulo\small\bfseries Estado \\
+\endhead
+\rowcolor{white}
+1 & Configuración sensores BME280 &
+Instalación y calibración de los sensores de temperatura, humedad y presión en los nodos ESP32. &
+16/06 & 4 & \EstadoCompletado \\
+\rowcolor{GrisClaro}
+2 & Desarrollo firmware MQTT &
+Programación del protocolo MQTT para transmisión de datos al broker HiveMQ local. &
+17/06 & 6 & \EstadoCompletado \\
+\rowcolor{white}
+3 & Integración con Node-RED &
+Creación de flujos de procesamiento y visualización de datos en dashboard Node-RED. &
+18/06 & 5 & \EstadoEnCurso \\
+\rowcolor{GrisClaro}
+4 & Pruebas de conectividad WiFi &
+Validación del rango de cobertura y estabilidad de conexión en las tres zonas del laboratorio. &
+19/06 & 3 & \EstadoEnCurso \\
+\rowcolor{white}
+5 & Documentación de API REST &
+Especificación de endpoints para consulta de datos históricos desde la base InfluxDB. &
+20/06 & 2 & \EstadoPendiente \\
+\rowcolor{GrisClaro}
+6 & Revisión de seguridad TLS &
+Implementación de certificados TLS para cifrado del canal MQTT. Pendiente de acceso al servidor. &
+--- & --- & \EstadoBloqueado \\
+\end{longtable}
+
+\noindent{\small\color{GrisMedio}
+\textbf{Total horas registradas:} 20\,h
+\quad|\quad
+\textbf{Período:} \DocPeriodo
+}
+
+\section{Observaciones}
+
+Durante la semana se presentaron dificultades con la estabilidad de la red WiFi del laboratorio en la zona norte. Se identificó interferencia en el canal 6; se realizó cambio al canal 11, con mejora significativa en la latencia (\textasciitilde12\,ms vs.\ 45\,ms previos).
+
+El broker MQTT HiveMQ presentó un reinicio no planificado el 18/06 durante las pruebas de integración, generando pérdida de datos por 20 minutos. Se activó el mecanismo de persistencia de mensajes (QoS 1) como medida correctiva.
+
+\begin{tcolorbox}[cajaNota]
+  El módulo de seguridad TLS requiere acceso de administrador al servidor de certificados del ITM. Se solicitó acceso el 19/06 a la Dirección de Sistemas --- tiempo estimado de respuesta: 3 días hábiles.
+\end{tcolorbox}
+
+\section{Próximos Pasos}
+
+\begin{itemize}[label={\color{AzulITM}\textbf{>}}, leftmargin=1.8em, itemsep=4pt]
+  \item Completar integración Node-RED con visualización en tiempo real de los 8 nodos activos.
+  \item Finalizar documentación de la API REST con ejemplos de consulta en Python.
+  \item Resolver acceso TLS e implementar cifrado en el canal MQTT.
+  \item Realizar prueba de carga con los 8 nodos transmitiendo simultáneamente a 1\,Hz.
+  \item Preparar informe de resultados preliminares para reunión del 27/06.
+\end{itemize}
+
+\FirmaSimple
+
+%% -----------------------------------------------------------------
+%% FIN VARIANTE A
+%% -----------------------------------------------------------------
+
+
+%% -----------------------------------------------------------------
+%% === VARIANTE B: GUÍA === descomenta esta sección ===
+%% (Comenta todo lo anterior desde \PortadaActividades hasta
+%%  \FirmaSimple y descomenta el bloque siguiente)
+%% -----------------------------------------------------------------
+
+%\PortadaActividades{Guía Técnica}{\DocNumero}
+%
+%\section{Objetivo de la Guía}
+%
+%Esta guía describe el proceso de configuración e integración de sensores BME280
+%con microcontroladores ESP32 usando MicroPython y el protocolo MQTT para la
+%transmisión de datos hacia un broker local en la red del CORIOTLAB.
+%
+%\section{Requisitos Previos}
+%
+%\begin{itemize}[label={\color{AzulITM}\textbf{>}}, leftmargin=1.8em, itemsep=4pt]
+%  \item Microcontrolador ESP32 con MicroPython instalado (v1.22 o superior).
+%  \item Sensor BME280 conectado por I\textsuperscript{2}C (SDA=GPIO21, SCL=GPIO22).
+%  \item Broker MQTT activo en la red local (HiveMQ CE o Mosquitto).
+%  \item Python 3.10+ con las librerías \texttt{paho-mqtt} y \texttt{bme280}.
+%  \item Acceso a la red WiFi del laboratorio (SSID: CORIOTLAB-LAB).
+%\end{itemize}
+%
+%\section{Pasos}
+%
+%\subsection{Instalación del firmware MicroPython en ESP32}
+%
+%Descargar el firmware desde el sitio oficial y flashear con \texttt{esptool.py}:
+%
+%\begin{tcolorbox}[cajaDatos]
+%\begin{lstlisting}[language=bash]
+%# Borrar flash previa
+%esptool.py --port /dev/ttyUSB0 erase_flash
+%# Flashear firmware MicroPython
+%esptool.py --chip esp32 --port /dev/ttyUSB0 \
+%  write_flash -z 0x1000 esp32-micropython-1.22.0.bin
+%\end{lstlisting}
+%\end{tcolorbox}
+%
+%\subsection{Lectura del sensor BME280}
+%
+%Copiar el siguiente script al ESP32 usando \texttt{ampy} o Thonny IDE:
+%
+%\begin{tcolorbox}[cajaDatos]
+%\begin{lstlisting}[language=Python]
+%import bme280
+%from machine import I2C, Pin
+%
+%i2c = I2C(0, sda=Pin(21), scl=Pin(22), freq=400000)
+%sensor = bme280.BME280(i2c=i2c)
+%
+%temp, pres, hum = sensor.read_compensated_data()
+%print(f"Temp: {temp/100:.1f} C | Hum: {hum/1024:.1f}% | Pres: {pres/25600:.1f} hPa")
+%\end{lstlisting}
+%\end{tcolorbox}
+%
+%\begin{tcolorbox}[cajaNota]
+%  Los valores del BME280 vienen en formato de punto fijo.
+%  Temperatura / 100, humedad / 1024 y presión / 25600 para obtener unidades SI.
+%\end{tcolorbox}
+%
+%\subsection{Publicación de datos por MQTT}
+%
+%\begin{tcolorbox}[cajaDatos]
+%\begin{lstlisting}[language=Python]
+%from umqtt.simple import MQTTClient
+%import json, time
+%
+%client = MQTTClient("esp32_node1", "192.168.1.100")
+%client.connect()
+%
+%while True:
+%    payload = json.dumps({"temp": temp/100, "hum": hum/1024})
+%    client.publish(b"coriot/nodo1/ambiental", payload.encode())
+%    time.sleep(5)
+%\end{lstlisting}
+%\end{tcolorbox}
+%
+%\begin{tcolorbox}[cajaAlerta]
+%  No usar QoS 0 en producción. Configurar QoS 1 para garantizar
+%  la entrega de mensajes ante pérdidas momentáneas de conexión.
+%\end{tcolorbox}
+%
+%\section{Conclusión}
+%
+%Con estos pasos el nodo ESP32 queda operativo y transmitiendo datos ambientales
+%cada 5 segundos al broker MQTT. El siguiente paso es configurar Node-RED para
+%suscribirse al tópico \texttt{coriot/\#} y visualizar los datos en tiempo real.
+%
+%\FirmaSimple
+
+%% -----------------------------------------------------------------
+%% FIN VARIANTE B
+%% -----------------------------------------------------------------
+
+\end{document}
