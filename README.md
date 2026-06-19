@@ -582,7 +582,7 @@ Ronald De Los Ríos Q. — Comunicador Gráfico
 
 **Sistema de plantillas LaTeX v1.0**  
 Santiago Cano — Investigador CORIOTLAB  
-`santiagocano298366@gmail.com`
+`santiagocano298366@correo.itm.edu.com`
 
 **Laboratorio CORIOTLAB**  
 Control, Robótica e Internet de las Cosas  
