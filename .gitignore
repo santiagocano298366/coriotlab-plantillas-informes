@@ -22,6 +22,10 @@
 
 # PDFs compilados (se regeneran con compile.ps1)
 output/**/*.pdf
+informes/**/*.pdf
+
+# Fuentes (archivos binarios grandes — instalar con setup_coriotlab.ps1)
+fonts/
 
 # Archivos de prueba temporales
 informes/**/test_*.tex
