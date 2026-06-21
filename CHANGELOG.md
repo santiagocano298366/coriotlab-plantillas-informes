@@ -1,5 +1,38 @@
 # CHANGELOG — Sistema de Plantillas CORIOTLAB
 
+## [1.3.0] — 2026-06-21
+
+### Cambiado
+- Estilo de secciones en todos los templates LaTeX: eliminado `\titlerule` debajo
+  de los títulos de sección para coincidir con la estructura del documento Word de referencia.
+  Los títulos quedan como texto AzulITM bold con espaciado aumentado.
+- Macro `\FirmaSimple` (actividades): reemplazado `\hline` de tabla por línea de color
+  AzulITM (`\rule{7cm}{0.6pt}`), nombre en bold GrisPizarra, cargo/org/fecha en GrisMedio.
+- Tabla de firmas (informe técnico): mismo cambio — líneas AzulITM en lugar de `\hline`.
+- Aumentado el espaciado `\titlespacing*{\section}` de `{0pt}{1.8em}{0.6em}` a
+  `{0pt}{2em}{0.8em}` para compensar la eliminación de la línea decorativa.
+
+### Agregado
+- Carpeta `formatos/word/` con `informe_actividades.docx` — plantilla Word oficial
+  con la misma estructura de secciones que la versión LaTeX.
+- Sección **Formatos disponibles** en README con tabla separada LaTeX / Word.
+- Sección **Estructura del repositorio** en README con árbol de directorios.
+
+### Eliminado
+- Archivos `test_fonts.tex`, `test_fonts2.tex`, `test_abspath.tex`, `test_names.tex`
+  (residuos de sesiones de debugging) de `informes/actividades/`.
+
+---
+
+## [1.2.0] — 2026-06-19
+
+### Agregado
+- Plantillas con texto guía y Fichas de Uso en `plantillas/`
+- Manuales de usuario en `docs/` (MANUAL_SISTEMA, ACTIVIDADES, TECNICO, PRESENTACION)
+- README rediseñado con índice visual, badges y tabla de formatos
+
+---
+
 ## [1.0.0] — 2026-06-19
 
 ### Agregado

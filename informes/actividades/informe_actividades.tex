@@ -143,13 +143,13 @@
 \usepackage{titlesec}
 \titleformat{\section}
   {\FuenteTitulo\large\color{AzulITM}\bfseries}
-  {\thesection.}{0.5em}{}[{\color{AzulITM}\titlerule[0.8pt]}]
+  {\thesection.}{0.5em}{}
 
 \titleformat{\subsection}
   {\FuenteTitulo\normalsize\color{GrisPizarra}\bfseries}
   {\thesubsection.}{0.5em}{}
 
-\titlespacing*{\section}   {0pt}{1.8em}{0.6em}
+\titlespacing*{\section}   {0pt}{2em}{0.8em}
 \titlespacing*{\subsection}{0pt}{1.2em}{0.4em}
 
 %% -----------------------------------------------------------------
@@ -250,14 +250,13 @@
 %% -----------------------------------------------------------------
 \newcommand{\FirmaSimple}{%
   \vspace{2.5em}
-  \noindent
-  \begin{tabular}{p{7cm}}
-    \hline\\[-6pt]
-    {\small\color{GrisPizarra}\DocAutor}\\
-    {\small\color{GrisMedio}\DocCargo}\\
-    {\small\color{GrisMedio}CORIOTLAB --- ITM}\\
-    {\small\color{GrisMedio}\DocFecha}
-  \end{tabular}
+  \noindent\begin{minipage}{8cm}
+    {\color{AzulITM}\rule{7cm}{0.6pt}}\\[4pt]
+    {\small\bfseries\color{GrisPizarra}\DocAutor}\\[2pt]
+    {\footnotesize\color{GrisMedio}\DocCargo}\\[1pt]
+    {\footnotesize\color{GrisMedio}CORIOTLAB --- ITM}\\[1pt]
+    {\footnotesize\color{GrisMedio}\DocFecha}
+  \end{minipage}
 }
 
 %% =================================================================

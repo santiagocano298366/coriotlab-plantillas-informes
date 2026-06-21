@@ -2,59 +2,120 @@
 
 ![XeLaTeX](https://img.shields.io/badge/XeLaTeX-requerido-2C6EAA?logo=latex&logoColor=white)
 ![MiKTeX](https://img.shields.io/badge/MiKTeX-26.5+-0078D4?logo=windows&logoColor=white)
-![Fuentes](https://img.shields.io/badge/Fuentes-Google%20Fonts-EA4335?logo=google-fonts&logoColor=white)
-![Versión](https://img.shields.io/badge/versión-1.2-102D69)
+![Versión](https://img.shields.io/badge/versión-1.3-102D69)
 ![Licencia](https://img.shields.io/badge/licencia-privada%20CORIOTLAB-C14894)
 
-> Sistema oficial de plantillas XeLaTeX con identidad visual completa del
-> **Laboratorio CORIOTLAB — ITM**. Genera documentos PDF institucionales
-> listos para entregar: informes internos, informes técnicos y presentaciones.
+> Sistema oficial de plantillas de documentos con identidad visual completa del
+> **Laboratorio CORIOTLAB — ITM**. Disponible en dos formatos: **LaTeX** (PDF institucional)
+> y **Word** (.docx para edición rápida). Informes internos, técnicos y presentaciones.
 
 ---
 
 ## Formatos disponibles
 
-| Formato | Plantilla | Manual | PDF de muestra |
-|---|---|---|---|
-| Informe de Actividades | [`plantillas/actividades/plantilla_actividades.tex`](plantillas/actividades/plantilla_actividades.tex) | [Manual](docs/MANUAL_ACTIVIDADES.md) | `output/actividades/` |
-| Informe Técnico | [`plantillas/tecnicos/plantilla_tecnico.tex`](plantillas/tecnicos/plantilla_tecnico.tex) | [Manual](docs/MANUAL_TECNICO.md) | `output/tecnicos/` |
-| Presentación Beamer | [`plantillas/presentaciones/plantilla_presentacion.tex`](plantillas/presentaciones/plantilla_presentacion.tex) | [Manual](docs/MANUAL_PRESENTACION.md) | `output/presentaciones/` |
+### LaTeX → PDF (recomendado)
+
+Genera PDFs institucionales con membrete, tipografía y paleta de colores CORIOTLAB.
+Requiere XeLaTeX (MiKTeX 26.5+) y fuentes instaladas en Windows.
+
+| Documento | Plantilla LaTeX | Manual |
+|---|---|---|
+| **Informe de Actividades** | [`plantillas/actividades/plantilla_actividades.tex`](plantillas/actividades/plantilla_actividades.tex) | [Manual](docs/MANUAL_ACTIVIDADES.md) |
+| **Informe Técnico** | [`plantillas/tecnicos/plantilla_tecnico.tex`](plantillas/tecnicos/plantilla_tecnico.tex) | [Manual](docs/MANUAL_TECNICO.md) |
+| **Presentación Beamer** | [`plantillas/presentaciones/plantilla_presentacion.tex`](plantillas/presentaciones/plantilla_presentacion.tex) | [Manual](docs/MANUAL_PRESENTACION.md) |
+
+### Word → .docx (edición rápida)
+
+Para entregas inmediatas o cuando no se dispone de XeLaTeX.
+Misma estructura de secciones que las plantillas LaTeX.
+
+| Documento | Archivo Word | Instrucciones |
+|---|---|---|
+| **Informe de Actividades** | [`formatos/word/informe_actividades.docx`](formatos/word/informe_actividades.docx) | Abrir en Word · rellenar campos entre `[corchetes]` |
+
+> **Nota:** Los informes Word tienen la misma estructura de secciones que los LaTeX
+> (Registro de Actividades → Observaciones → Próximos Pasos → Firma).
+> Para máxima fidelidad visual usar siempre la versión LaTeX.
 
 ---
 
-## Inicio rápido
+## Inicio rápido — LaTeX
 
 ```powershell
 # 1. Instalar fuentes (solo la primera vez)
 .\setup_coriotlab.ps1
 
-# 2. Copiar la plantilla deseada a tu proyecto
+# 2. Copiar la plantilla deseada a tu carpeta de proyecto
 Copy-Item plantillas\actividades\plantilla_actividades.tex `
-          C:\CORIOTLAB\PROYECTOS\MI_PROYECTO\informes\actividades\
+          C:\CORIOTLAB\PROYECTOS\MI_PROYECTO\informes\
 
-# 3. Editar solo la Zona de Configuración al inicio del .tex
+# 3. Editar la Zona de Configuración al inicio del .tex
 #    (campos entre los delimitadores %% ═══)
 
-# 4. Compilar (doble pasada obligatoria)
-cd C:\CORIOTLAB\PROYECTOS\MI_PROYECTO\informes\actividades
+# 4. Compilar con doble pasada (obligatoria)
+cd C:\CORIOTLAB\PROYECTOS\MI_PROYECTO\informes
 xelatex -interaction=nonstopmode plantilla_actividades.tex
 xelatex -interaction=nonstopmode plantilla_actividades.tex
 
-# 5. El PDF queda en la misma carpeta del .tex
+# 5. El PDF queda en la misma carpeta
+```
+
+O usando el script de compilación del repositorio:
+
+```powershell
+.\compile.ps1 actividades      # Informe de Actividades
+.\compile.ps1 tecnicos         # Informe Técnico
+.\compile.ps1 presentaciones   # Presentación Beamer
+.\compile.ps1 todos            # Los tres documentos
+```
+
+---
+
+## Inicio rápido — Word
+
+1. Descargar [`formatos/word/informe_actividades.docx`](formatos/word/informe_actividades.docx)
+2. Abrir en Microsoft Word
+3. Reemplazar todos los campos entre `[corchetes]` con la información real
+4. Guardar como nuevo archivo con el nombre del proyecto
+
+---
+
+## Estructura del repositorio
+
+```
+INFORMES/
+├── plantillas/              ← Plantillas LaTeX listas para usar (COPIAR, no editar aquí)
+│   ├── actividades/         → plantilla_actividades.tex  (Zona de Configuración + guía)
+│   ├── tecnicos/            → plantilla_tecnico.tex
+│   └── presentaciones/      → plantilla_presentacion.tex
+│
+├── formatos/                ← Formatos alternativos
+│   └── word/                → informe_actividades.docx
+│
+├── informes/                ← Documentos de ejemplo con contenido IoT (referencia)
+│   ├── actividades/
+│   ├── tecnicos/
+│   └── presentaciones/
+│
+├── membretes/               ← PNGs de membrete (azul, celeste, gris, magenta)
+├── fonts/                   ← Fuentes TTF (Inter, MuseoModerno, Space Mono)
+├── docs/                    ← Manuales de uso
+├── compile.ps1              ← Script de compilación Windows
+└── setup_coriotlab.ps1      ← Instalador de fuentes Windows
 ```
 
 ---
 
 ## Paleta de colores
 
-| Token | HEX | Vista | Uso |
-|---|---|---|---|
-| `AzulITM` | `#102D69` | ![#102D69](https://placehold.co/14x14/102D69/102D69.png) | Institucional — titulares, portadas, encabezados de tabla |
-| `Magenta` | `#C14894` | ![#C14894](https://placehold.co/14x14/C14894/C14894.png) | Alertas, bloqueados, acento en presentaciones |
-| `AzulDigital` | `#56ACDE` | ![#56ACDE](https://placehold.co/14x14/56ACDE/56ACDE.png) | Acentos, enlaces, estado "En curso", franjas |
-| `GrisPizarra` | `#2F2F2F` | ![#2F2F2F](https://placehold.co/14x14/2F2F2F/2F2F2F.png) | Texto principal |
-| `GrisClaro` | `#F2F2F2` | ![#F2F2F2](https://placehold.co/14x14/F2F2F2/F2F2F2.png) | Filas alternas, fondos de código |
-| `VerdeTarea` | `#1A5C35` | ![#1A5C35](https://placehold.co/14x14/1A5C35/1A5C35.png) | Estado "Completado" (actividades) |
+| Token | HEX | Uso |
+|---|---|---|
+| `AzulITM` | `#102D69` | Institucional — títulos, portadas, encabezados de tabla |
+| `Magenta` | `#C14894` | Alertas, estado Bloqueado, acentos en presentaciones |
+| `AzulDigital` | `#56ACDE` | Acentos, enlaces, estado En curso, franjas |
+| `GrisPizarra` | `#2F2F2F` | Texto principal de cuerpo |
+| `GrisClaro` | `#F2F2F2` | Filas alternas de tablas, fondos de código |
+| `VerdeTarea` | `#1A5C35` | Estado Completado (informe de actividades) |
 
 ---
 
@@ -66,43 +127,30 @@ xelatex -interaction=nonstopmode plantilla_actividades.tex
 | **Space Mono** | `Space Mono` | Código fuente, términos técnicos |
 | **Inter** | `Inter` | Cuerpo de texto |
 
+Instalar ejecutando `.\setup_coriotlab.ps1` (una sola vez).
+
 ---
 
-## Documentación
+## Documentación completa
 
-| Documento | Contenido |
+| Manual | Contenido |
 |---|---|
-| [MANUAL_SISTEMA.md](docs/MANUAL_SISTEMA.md) | Estructura, compilación, rutas, reglas críticas |
-| [MANUAL_ACTIVIDADES.md](docs/MANUAL_ACTIVIDADES.md) | Tabla de actividades, estados, variantes |
+| [MANUAL_SISTEMA.md](docs/MANUAL_SISTEMA.md) | Estructura general, compilación, rutas, reglas críticas |
+| [MANUAL_ACTIVIDADES.md](docs/MANUAL_ACTIVIDADES.md) | Tabla de actividades, estados, variante Guía |
 | [MANUAL_TECNICO.md](docs/MANUAL_TECNICO.md) | Secciones fijas y opcionales, control de versiones |
-| [MANUAL_PRESENTACION.md](docs/MANUAL_PRESENTACION.md) | Diapositivas, reglas Beamer, agregar slides |
+| [MANUAL_PRESENTACION.md](docs/MANUAL_PRESENTACION.md) | Diapositivas, reglas Beamer, cómo agregar slides |
 | [CHANGELOG.md](CHANGELOG.md) | Historial de versiones |
 
 ---
 
-## Requisitos
+## Requisitos técnicos
 
-- **MiKTeX 26.5+** instalado en Windows
-- **XeLaTeX** (incluido en MiKTeX) — compilador obligatorio
-- **Fuentes instaladas:** Inter, MuseoModerno, Space Mono
-  ```powershell
-  .\setup_coriotlab.ps1   # instala las fuentes en %LOCALAPPDATA%\Microsoft\Windows\Fonts\
-  ```
-
----
-
-## ¿Necesitas exportar a Word o Overleaf?
-
-**Word (.docx):** Estas plantillas usan fuentes y diseño que no tienen
-equivalente directo en Word. Para entregas que requieran `.docx`, copiar el
-texto del PDF compilado y aplicar el Brand Book CORIOTLAB manualmente.
-
-**Overleaf:** Las plantillas **no son compatibles** con Overleaf porque:
-1. Overleaf no tiene acceso a las fuentes instaladas localmente.
-2. Las rutas de membretes son relativas al sistema de archivos Windows.
-
-Para uso en Overleaf sería necesario: subir los TTF como recursos del proyecto
-y cambiar las rutas de `fontspec` a `Path=fonts/...`.
+| Requisito | Detalle |
+|---|---|
+| **MiKTeX 26.5+** | Instalado en Windows — incluye XeLaTeX |
+| **XeLaTeX** | Compilador obligatorio (nunca pdfLaTeX ni LuaLaTeX) |
+| **Fuentes** | Inter · MuseoModerno · Space Mono (instalar con `setup_coriotlab.ps1`) |
+| **Microsoft Word** | Solo necesario para el formato `.docx` |
 
 ---
 

@@ -200,7 +200,7 @@
 %% -----------------------------------------------------------------
 \titleformat{\section}
   {\FuenteTitulo\large\color{AzulITM}\bfseries}
-  {\thesection.}{0.5em}{}[{\color{AzulITM}\titlerule[0.8pt]}]
+  {\thesection.}{0.5em}{}
 \titleformat{\subsection}
   {\FuenteTitulo\normalsize\color{GrisPizarra}\bfseries}
   {\thesubsection.}{0.5em}{}
@@ -208,7 +208,7 @@
   {\normalsize\color{GrisPizarra}\bfseries\itshape}
   {\thesubsubsection.}{0.5em}{}
 
-\titlespacing*{\section}      {0pt}{1.8em}{0.6em}
+\titlespacing*{\section}      {0pt}{2em}{0.8em}
 \titlespacing*{\subsection}   {0pt}{1.2em}{0.4em}
 \titlespacing*{\subsubsection}{0pt}{0.8em}{0.3em}
 
@@ -574,16 +574,17 @@ relevantes que deben quedar documentados.{]}}
 \noindent
 \begin{tabular}{p{7cm} p{1cm} p{7cm}}
   \multicolumn{1}{c}{\textbf{\small\color{AzulITM}Elaborado por}} & &
-  \multicolumn{1}{c}{\textbf{\small\color{AzulITM}Revisado y aprobado por}} \\[0.8em]
-  \hline\\[-6pt]
-  {\small\color{GrisPizarra}\textbf{\DocAutor}} & &
-  {\small\color{GrisPizarra}\textbf{\DocRevisor}} \\[2pt]
-  {\small\color{GrisMedio}\DocCargoAutor} & &
-  {\small\color{GrisMedio}\DocCargoRevisor} \\[2pt]
-  {\small\color{GrisMedio}\DocEntidad} & &
-  {\small\color{GrisMedio}\DocEntidad} \\[2pt]
-  {\small\color{GrisMedio}\DocFecha} & &
-  {\small\color{GrisMedio}\DocFecha} \\
+  \multicolumn{1}{c}{\textbf{\small\color{AzulITM}Revisado y aprobado por}} \\[0.6em]
+  \multicolumn{1}{l}{\color{AzulITM}\rule{7cm}{0.6pt}} & &
+  \multicolumn{1}{l}{\color{AzulITM}\rule{7cm}{0.6pt}} \\[4pt]
+  {\small\bfseries\color{GrisPizarra}\DocAutor} & &
+  {\small\bfseries\color{GrisPizarra}\DocRevisor} \\[2pt]
+  {\footnotesize\color{GrisMedio}\DocCargoAutor} & &
+  {\footnotesize\color{GrisMedio}\DocCargoRevisor} \\[1pt]
+  {\footnotesize\color{GrisMedio}\DocEntidad} & &
+  {\footnotesize\color{GrisMedio}\DocEntidad} \\[1pt]
+  {\footnotesize\color{GrisMedio}\DocFecha} & &
+  {\footnotesize\color{GrisMedio}\DocFecha} \\
 \end{tabular}
 
 \end{document}
