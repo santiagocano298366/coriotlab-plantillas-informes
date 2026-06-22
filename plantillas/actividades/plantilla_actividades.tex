@@ -35,7 +35,7 @@
 
 %% --- Geometría — márgenes calibrados al área de contenido del membrete
 \usepackage[
-  top=3.5cm, bottom=3.2cm,
+  top=4.4cm, bottom=3.8cm,
   left=2.8cm, right=2.8cm
 ]{geometry}
 
@@ -114,8 +114,8 @@
   {\FuenteTitulo\normalsize\color{GrisPizarra}\bfseries}
   {\thesubsection.}{0.5em}{}
 
-\titlespacing*{\section}   {0pt}{2em}{0.9em}
-\titlespacing*{\subsection}{0pt}{1.2em}{0.4em}
+\titlespacing*{\section}   {0pt}{1.4em}{0.7em}
+\titlespacing*{\subsection}{0pt}{1.0em}{0.3em}
 
 %% ─────────────────────────────────────────────────────────────────
 %% MACROS DE ESTADO DE ACTIVIDAD
@@ -181,7 +181,7 @@
 %% MACRO: FIRMA
 %% ─────────────────────────────────────────────────────────────────
 \newcommand{\FirmaSimple}{%
-  \vspace{3em}
+  \vspace{2em}
   \noindent
   \begin{minipage}{8.5cm}
     {\color{AzulITM}\rule{7.5cm}{0.8pt}}\\[6pt]
@@ -201,7 +201,8 @@
 %% ─────────────────────────────────────────────────────────────────
 %% PORTADA — título centrado verticalmente en la hoja
 %% ─────────────────────────────────────────────────────────────────
-\vspace*{\fill}
+\null
+\vfill
 
 \begin{center}
 
@@ -242,7 +243,8 @@
 
 \end{center}
 
-\vspace*{\fill}
+\vfill
+\null
 
 \newpage
 
@@ -326,7 +328,7 @@ y quién debe resolverlo.] &
 encontradas, cambios de alcance o decisiones tomadas que afecten el
 desarrollo del proyecto. Máximo 3 párrafos.]
 
-\begin{tcolorbox}[cajaNota, title=Nota]
+\begin{tcolorbox}[cajaNota, title=Nota, top=4pt, bottom=4pt]
   [Opcional: use esta caja para destacar información que requiera
   atención especial del lector.]
 \end{tcolorbox}
@@ -336,12 +338,13 @@ desarrollo del proyecto. Máximo 3 párrafos.]
 \section{Próximos Pasos}
 
 \begin{itemize}[label={\color{AzulITM}\textbf{>}},
-                leftmargin=1.8em, itemsep=5pt, topsep=2pt]
+                leftmargin=1.8em, itemsep=2pt, topsep=0pt]
   \item [Acción concreta a realizar — iniciar con verbo en infinitivo.]
   \item [Responsable y fecha límite si aplica.]
   \item [Recurso o dependencia necesaria para completar la acción.]
 \end{itemize}
 
+\vspace*{\fill}
 \FirmaSimple
 
 %% ─────────────────────────────────────────────────────────────────

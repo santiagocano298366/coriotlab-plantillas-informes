@@ -20,7 +20,7 @@
 \newcommand{\DocLugar}{Medellín, Colombia}
 \newcommand{\DocVersion}{1.0}
 \newcommand{\DocFecha}{[DD de mes de AAAA]}
-\newcommand{\DocConfidencialidad}{Uso interno — CORIOTLAB}
+\newcommand{\DocConfidencialidad}{Uso interno — \mbox{CORIOTLAB}}
 \newcommand{\DocAutor}{[Nombre completo del autor]}
 \newcommand{\DocCargoAutor}{[Cargo — CORIOTLAB]}
 \newcommand{\DocRevisor}{[Nombre del revisor]}
@@ -42,7 +42,7 @@
 
 %% --- Geometría
 \usepackage[
-  top=3.5cm, bottom=3.2cm,
+  top=4.4cm, bottom=3.8cm,
   left=2.8cm, right=2.8cm
 ]{geometry}
 
@@ -186,7 +186,8 @@
 %% ─────────────────────────────────────────────────────────────────
 %% 1. PORTADA — título centrado verticalmente
 %% ─────────────────────────────────────────────────────────────────
-\vspace*{\fill}
+\null
+\vfill
 
 \begin{center}
 
@@ -215,13 +216,13 @@
 
   \vspace{2em}
 
-  %% Metadatos en dos columnas
-  \begin{tabular}{r@{\enspace}l@{\qquad\qquad}r@{\enspace}l}
+  %% Metadatos en dos columnas con anchos controlados
+  \begin{tabular}{r@{\ }p{4.8cm}@{\quad}r@{\ }>{\raggedright\arraybackslash}p{4.5cm}}
     {\small\color{GrisMedio}Proyecto}          & {\small\color{GrisPizarra}\DocProyecto}
     & {\small\color{GrisMedio}Versión}          & {\small\color{GrisPizarra}\DocVersion} \\[4pt]
     {\small\color{GrisMedio}Código}            & {\small\color{GrisPizarra}\DocCodigo}
     & {\small\color{GrisMedio}Fecha}            & {\small\color{GrisPizarra}\DocFecha} \\[4pt]
-    {\small\color{GrisMedio}Cliente / Entidad} & {\small\color{GrisPizarra}\DocCliente}
+    {\small\color{GrisMedio}Cliente}           & {\small\color{GrisPizarra}\DocCliente}
     & {\small\color{GrisMedio}Lugar}            & {\small\color{GrisPizarra}\DocLugar} \\[4pt]
     {\small\color{GrisMedio}Período}           & {\small\color{GrisPizarra}\DocPeriodo}
     & {\small\color{GrisMedio}Confidencialidad} & {\small\color{GrisPizarra}\DocConfidencialidad} \\
@@ -239,7 +240,8 @@
 
 \end{center}
 
-\vspace*{\fill}
+\vfill
+\null
 
 \newpage
 
@@ -315,9 +317,9 @@ o beneficio esperado], mediante [método o tecnología empleada].
 
 \begin{itemize}[label={\color{AzulITM}\textbf{>}},
                 leftmargin=1.8em, itemsep=5pt, topsep=2pt]
-  \item [Objetivo específico 1: acción concreta y verificable.]
-  \item [Objetivo específico 2: acción concreta y verificable.]
-  \item [Objetivo específico 3: acción concreta y verificable.]
+  \item [Objetivo específico 1: acción \mbox{concreta} y verificable.]
+  \item [Objetivo específico 2: acción \mbox{concreta} y verificable.]
+  \item [Objetivo específico 3: acción \mbox{concreta} y verificable.]
 \end{itemize}
 
 %% ─────────────────────────────────────────────────────────────────
@@ -417,7 +419,7 @@ aprendizajes relevantes que deben quedar documentados.]
 %% ─────────────────────────────────────────────────────────────────
 %% 7. FIRMAS Y APROBACIÓN
 %% ─────────────────────────────────────────────────────────────────
-\needspace{6cm}
+\vfill
 \section*{Firmas y Aprobación}
 \addcontentsline{toc}{section}{Firmas y Aprobación}
 
