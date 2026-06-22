@@ -4,74 +4,41 @@
 %% ║         Dos variantes: PERIÓDICO y GUÍA                        ║
 %% ╚══════════════════════════════════════════════════════════════════╝
 %%
-%% ═══════════════════════════════════════════════════════════════════
-%% FICHA DE USO
-%% ═══════════════════════════════════════════════════════════════════
-%% PARA QUÉ: Documentar actividades realizadas en un período definido
-%%           (semanal, quincenal o mensual), o guías técnicas paso a paso.
-%% PARA QUIÉN: Uso interno — equipo y dirección de CORIOTLAB.
-%% CUÁNDO: Al final de cada período de reporte.
-%% VARIANTES:
-%%   - PERIÓDICO: reportes regulares con tabla de actividades y estados.
-%%   - GUÍA:      documentación de procedimientos técnicos con código.
 %% COMPILAR: xelatex -interaction=nonstopmode plantilla_actividades.tex
 %%           (doble pasada — ejecutar el comando dos veces)
-%% OUTPUT:   plantilla_actividades.pdf (en la misma carpeta)
-%% ═══════════════════════════════════════════════════════════════════
 
 %% ═══════════════════════════════════════════════════════════════════
 %% ZONA DE CONFIGURACIÓN — editar aquí antes de compilar
 %% ═══════════════════════════════════════════════════════════════════
 
-%% VARIANTE ACTIVA: Controla qué sección del documento se compila.
-%%   "periodico" → activa tabla de actividades con estados.
-%%   "guia"      → activa documentación de procedimiento técnico.
-%% Para cambiar de variante: 1) edite este valor, 2) comente la sección
-%% activa del cuerpo y descomente la sección correspondiente.
+%% VARIANTE ACTIVA: "periodico" o "guia"
 \newcommand{\TipoVariante}{periodico}
 
-%% TIPO DE PERÍODO (solo para Variante Periódico):
-%%   Valores permitidos: Semanal | Quincenal | Mensual
-%%   Aparece en el encabezado de la portada: "Informe Semanal", etc.
+%% TIPO DE PERÍODO (solo Variante Periódico): Semanal | Quincenal | Mensual
 \newcommand{\TipoPeriodo}{Semanal}
 
-%% TÍTULO: Nombre descriptivo del proyecto o trabajo documentado.
-%%   Máximo 80 caracteres. Evitar abreviaciones.
-%%   Aparece en portada y en el encabezado de cada página.
-%%   Ejemplo: "Sistema de Monitoreo Ambiental con ESP32"
+%% TÍTULO del informe (máx. 80 caracteres)
 \newcommand{\DocTitulo}{[Título del informe o proyecto]}
 
-%% NÚMERO DE DOCUMENTO: Identificador único.
-%%   Formato: IA-AAAA-NNN
-%%   IA = Informe de Actividades | AAAA = año | NNN = número correlativo (001, 002…)
-%%   Ejemplo: IA-2025-001
+%% NÚMERO DE DOCUMENTO — Formato: IA-AAAA-NNN
 \newcommand{\DocNumero}{IA-2025-[NNN]}
 
-%% AUTOR: Nombre completo de quien elabora el informe.
-%%   Aparece en portada y en la firma al final.
+%% AUTOR — nombre completo
 \newcommand{\DocAutor}{[Nombre completo del autor]}
 
-%% CARGO: Rol del autor dentro de CORIOTLAB.
-%%   Valores frecuentes: Investigador | Investigador Principal |
-%%                       Monitor | Director | Auxiliar de laboratorio
+%% CARGO del autor dentro de CORIOTLAB
 \newcommand{\DocCargo}{[Cargo --- CORIOTLAB]}
 
-%% PROYECTO: Nombre oficial del proyecto al que pertenece este informe.
-%%   Debe coincidir con el nombre registrado en el plan de trabajo.
+%% PROYECTO — nombre oficial del proyecto
 \newcommand{\DocProyecto}{[Nombre del proyecto]}
 
-%% PERÍODO REPORTADO: Rango de fechas del período documentado.
-%%   Formato libre pero coherente. Ejemplo: "16 al 20 de junio de 2025"
+%% PERÍODO REPORTADO — rango de fechas
 \newcommand{\DocPeriodo}{[Período reportado: ej. "16 al 20 de junio de 2025"]}
 
-%% FECHA DE ENTREGA: Fecha en que se entrega el informe.
-%%   Formato: DD de mes de AAAA — Ejemplo: 20 de junio de 2025
-%%   Use \today para fecha automática del sistema, o escriba la fecha fija.
+%% FECHA DE ENTREGA — Formato: DD de mes de AAAA
 \newcommand{\DocFecha}{[DD de mes de AAAA]}
 
-%% VERSIÓN: Versión del documento. Iniciar en 1.0.
-%%   Incrementar decimalmente en revisiones menores (1.1, 1.2…);
-%%   incrementar entero en reestructuraciones mayores (2.0).
+%% VERSIÓN — iniciar en 1.0
 \newcommand{\DocVersion}{1.0}
 
 %% ═══════════════════════════════════════════════════════════════════
@@ -81,17 +48,16 @@
 %% --- Codificación y lenguaje
 \usepackage[spanish, es-nodecimaldot, es-noshorthands]{babel}
 
-%% --- Fuentes (XeLaTeX --- cargar por nombre de familia Windows)
+%% --- Fuentes (XeLaTeX — cargar por nombre de familia Windows)
 \usepackage{fontspec}
 \setmainfont{Inter}
 \newfontfamily\FuenteTitulo{MuseoModerno}
 \newfontfamily\FuenteCodigo{Space Mono}
 
-%% --- Geometría
+%% --- Geometría — márgenes ajustados al membrete (header ~3cm, footer ~2.5cm)
 \usepackage[
-  top=2.8cm, bottom=2.8cm,
-  left=2.5cm, right=2.5cm,
-  headheight=1.8cm
+  top=3.5cm, bottom=3.0cm,
+  left=2.5cm, right=2.5cm
 ]{geometry}
 
 %% --- Color
@@ -110,10 +76,6 @@
 \usepackage{graphicx}
 \usepackage{tikz}
 \usepackage{eso-pic}
-
-%% --- Encabezado y pie
-\usepackage{fancyhdr}
-\usepackage{lastpage}
 
 %% --- Tablas
 \usepackage{longtable}
@@ -137,14 +99,16 @@
 %% --- Espaciado de párrafos
 \usepackage{parskip}
 \setlength{\parskip}{6pt}
+\setlength{\parindent}{0pt}
 \renewcommand{\arraystretch}{1.4}
 
 %% -----------------------------------------------------------------
-%% MEMBRETE DE FONDO (8% opacidad en todas las páginas)
+%% MEMBRETE — opacidad completa en todas las páginas
+%% El membrete provee el header (logo + URL) y el footer (barra CORIOT)
 %% -----------------------------------------------------------------
 \AddToShipoutPictureBG{%
   \begin{tikzpicture}[remember picture, overlay]
-    \node[opacity=0.08] at (current page.center) {%
+    \node at (current page.center) {%
       \includegraphics[width=\paperwidth, height=\paperheight,
         keepaspectratio=false]%
         {../../membretes/membrete_azul.png}%
@@ -152,40 +116,8 @@
   \end{tikzpicture}%
 }
 
-%% -----------------------------------------------------------------
-%% ENCABEZADO Y PIE DE PÁGINA
-%% -----------------------------------------------------------------
-\pagestyle{fancy}
-\fancyhf{}
-
-\fancyhead[L]{%
-  {\FuenteTitulo\small\color{AzulITM}\textbf{CORIOTLAB}}%
-  {\color{GrisMedio}\small\ \ |\ \ }%
-  {\small\color{GrisPizarra}\DocTitulo}%
-}
-\fancyhead[R]{%
-  {\small\color{GrisMedio}\DocNumero}%
-}
-\fancyfoot[L]{%
-  {\footnotesize\color{GrisMedio}www.coriotlab.co\ \ |\ \ info@coriotlab.co}%
-}
-\fancyfoot[C]{%
-  {\footnotesize\color{GrisMedio}\DocFecha}%
-}
-\fancyfoot[R]{%
-  {\footnotesize\color{GrisMedio}Página \thepage\ de \pageref{LastPage}}%
-}
-
-\renewcommand{\footrulewidth}{0.4pt}
-\renewcommand{\footrule}{%
-  {\color{GrisLinea}\rule{\headwidth}{0.4pt}}%
-  \vskip 4pt%
-}
-\renewcommand{\headrulewidth}{1.2pt}
-\renewcommand{\headrule}{%
-  \vspace{2pt}%
-  {\color{AzulITM}\rule{\headwidth}{1.2pt}}%
-}
+%% Sin encabezado ni pie de página — el membrete los provee
+\pagestyle{empty}
 
 %% -----------------------------------------------------------------
 %% ESTILOS DE SECCIONES
@@ -194,51 +126,14 @@
 \titleformat{\section}
   {\FuenteTitulo\large\color{AzulITM}\bfseries}
   {\thesection.}{0.5em}{}
-
 \titleformat{\subsection}
   {\FuenteTitulo\normalsize\color{GrisPizarra}\bfseries}
   {\thesubsection.}{0.5em}{}
-
-\titlespacing*{\section}   {0pt}{2em}{0.8em}
+\titlespacing*{\section}   {0pt}{1.8em}{0.7em}
 \titlespacing*{\subsection}{0pt}{1.2em}{0.4em}
 
 %% -----------------------------------------------------------------
-%% MACRO: PORTADA
-%% -----------------------------------------------------------------
-\newcommand{\PortadaActividades}[2]{%
-  \thispagestyle{empty}
-  \begin{tikzpicture}[remember picture, overlay]
-    \fill[AzulITM] (current page.north west)
-      rectangle ([yshift=-4.5cm] current page.north east);
-    \node[anchor=west, text=white] at
-      ([xshift=2.5cm, yshift=-1.5cm] current page.north west)
-      {\FuenteTitulo\large\textbf{#1}};
-    \node[anchor=east, text=AzulDigital] at
-      ([xshift=-2.5cm, yshift=-1.5cm] current page.north east)
-      {\FuenteTitulo\Large\textbf{#2}};
-    \draw[AzulDigital, line width=2pt]
-      ([yshift=-4.5cm] current page.north west) --
-      ([yshift=-4.5cm] current page.north east);
-  \end{tikzpicture}%
-  \vspace{3.8cm}
-
-  \begin{center}
-    {\FuenteTitulo\Huge\color{AzulITM}\textbf{\DocTitulo}}\\[0.6em]
-    {\FuenteTitulo\large\color{GrisPizarra}\DocProyecto}\\[2em]
-    {\color{GrisLinea}\rule{\linewidth}{0.6pt}}\\[1.2em]
-    \begin{tabular}{ll}
-      {\small\color{GrisMedio}Autor:}   & {\small\color{GrisPizarra}\DocAutor} \\[3pt]
-      {\small\color{GrisMedio}Cargo:}   & {\small\color{GrisPizarra}\DocCargo} \\[3pt]
-      {\small\color{GrisMedio}Período:} & {\small\color{GrisPizarra}\DocPeriodo} \\[3pt]
-      {\small\color{GrisMedio}Versión:} & {\small\color{GrisPizarra}\DocVersion} \\[3pt]
-      {\small\color{GrisMedio}Fecha:}   & {\small\color{GrisPizarra}\DocFecha} \\
-    \end{tabular}
-  \end{center}
-  \newpage
-}
-
-%% -----------------------------------------------------------------
-%% MACRO: ESTADO DE TAREA
+%% MACROS DE ESTADO
 %% -----------------------------------------------------------------
 \newcommand{\EstadoCompletado}{%
   \textcolor{VerdeTarea}{\small\textbf{Completado}}}
@@ -296,7 +191,7 @@
 \lstset{style=coriotcode}
 
 %% -----------------------------------------------------------------
-%% MACRO: FIRMA SIMPLE
+%% MACRO: FIRMA
 %% -----------------------------------------------------------------
 \newcommand{\FirmaSimple}{%
   \vspace{2.5em}
@@ -316,13 +211,29 @@
 \color{GrisPizarra}
 
 %% -----------------------------------------------------------------
+%% PORTADA — igual al Word: título directo + metadata, sin barra TikZ
+%% El membrete ya provee el header con logo y la barra footer
+%% -----------------------------------------------------------------
+
+{\FuenteTitulo\LARGE\color{AzulITM}\bfseries\DocTitulo}\par\vspace{0.3em}
+{\FuenteTitulo\normalsize\color{GrisPizarra}\DocProyecto}\par\vspace{1em}
+{\color{GrisLinea}\rule{\linewidth}{0.5pt}}\par\vspace{0.8em}
+\begin{tabular}{@{}ll@{}}
+  {\small\color{GrisMedio}Autor:}   & {\small\color{GrisPizarra}\DocAutor}   \\[3pt]
+  {\small\color{GrisMedio}Cargo:}   & {\small\color{GrisPizarra}\DocCargo}   \\[3pt]
+  {\small\color{GrisMedio}Período:} & {\small\color{GrisPizarra}\DocPeriodo} \\[3pt]
+  {\small\color{GrisMedio}Versión:} & {\small\color{GrisPizarra}\DocVersion} \\[3pt]
+  {\small\color{GrisMedio}Fecha:}   & {\small\color{GrisPizarra}\DocFecha}   \\
+\end{tabular}
+
+\vspace{2em}
+
+%% -----------------------------------------------------------------
 %% === VARIANTE A: PERIÓDICO ===
 %% Para reportes regulares de actividades (semanal, quincenal, mensual).
 %% Estructura: Portada + Tabla de actividades + Observaciones +
 %%             Próximos pasos + Firma.
 %% -----------------------------------------------------------------
-
-\PortadaActividades{Informe \TipoPeriodo}{\DocNumero}
 
 \section{Registro de Actividades}
 
@@ -361,25 +272,25 @@
 \color{Blanco}\FuenteTitulo\small\bfseries Hrs &
 \color{Blanco}\FuenteTitulo\small\bfseries Estado \\
 \endhead
-%% --- FILA 1: Actividad completada (ejemplo de estado COMPLETADO)
+%% --- FILA 1
 \rowcolor{white}
 1 & {[}Nombre corto de la actividad{]} &
 {[}Descripción detallada de lo realizado. Máx.\ 150 caracteres. Incluir
 herramientas, métodos o resultados obtenidos.{]} &
 {[}DD/MM{]} & {[}H{]} & \EstadoCompletado \\
-%% --- FILA 2: Actividad en progreso (ejemplo de estado EN CURSO)
+%% --- FILA 2
 \rowcolor{GrisClaro}
 2 & {[}Nombre corto de la actividad{]} &
 {[}Descripción de actividad en progreso. Indicar porcentaje de avance
 o etapa actual si es relevante.{]} &
 {[}DD/MM{]} & {[}H{]} & \EstadoEnCurso \\
-%% --- FILA 3: Actividad planificada no iniciada (estado PENDIENTE)
+%% --- FILA 3
 \rowcolor{white}
 3 & {[}Nombre corto de la actividad{]} &
 {[}Actividad planificada para el período pero aún no iniciada.
 Indicar la razón del retraso si aplica.{]} &
 {[}DD/MM{]} & --- & \EstadoPendiente \\
-%% --- FILA 4: Actividad con bloqueo externo (estado BLOQUEADO)
+%% --- FILA 4
 \rowcolor{GrisClaro}
 4 & {[}Nombre corto de la actividad{]} &
 {[}Actividad detenida por una dependencia externa. Describir el
@@ -396,10 +307,8 @@ impedimento y quién debe resolverlo.{]} &
 
 \section{Observaciones}
 
-%% INSTRUCCIONES DE OBSERVACIONES:
-%% Reemplace el texto guía (itálica gris) con el contenido real.
 %% Incluya: dificultades, cambios de alcance, decisiones relevantes.
-%% Máximo 3 párrafos. Use cajaNota para destacar información crítica.
+%% Máximo 3 párrafos.
 
 {\itshape\color{GrisMedio}%
 Registre aquí situaciones relevantes del período: dificultades encontradas,
@@ -414,10 +323,7 @@ conciso. Máximo 3 párrafos.}
 
 \section{Próximos Pasos}
 
-%% INSTRUCCIONES DE PRÓXIMOS PASOS:
-%% Cada ítem debe ser una acción concreta y accionable.
-%% Iniciar con verbo en infinitivo: "Completar", "Implementar", "Revisar"...
-%% Agregar o eliminar ítems según necesidad.
+%% Cada ítem debe ser una acción concreta. Iniciar con verbo en infinitivo.
 
 \begin{itemize}[label={\color{AzulITM}\textbf{>}}, leftmargin=1.8em, itemsep=4pt]
   \item {[}Acción concreta a realizar --- iniciar con verbo en infinitivo.{]}
@@ -435,21 +341,14 @@ conciso. Máximo 3 párrafos.}
 %% -----------------------------------------------------------------
 %% === VARIANTE B: GUÍA TÉCNICA ===
 %% Para documentar procedimientos, configuraciones o tutoriales.
-%% Estructura: Portada + Objetivo + Requisitos + Pasos con código +
-%%             Cajas de nota/alerta + Conclusión + Firma.
-%%
-%% PARA ACTIVAR: comente todo lo anterior desde \PortadaActividades
-%%               hasta \FirmaSimple y descomente este bloque.
+%% PARA ACTIVAR: comente todo desde \section{Registro...} hasta
+%%               \FirmaSimple anterior y descomente este bloque.
 %% -----------------------------------------------------------------
 
-%\PortadaActividades{Guía Técnica}{\DocNumero}
-%
 %\section{Objetivo de la Guía}
 %
 %{[}Describa en 2--3 oraciones el objetivo de esta guía: qué proceso
-%documenta, qué sistema configura o qué procedimiento explica.
-%Ejemplo: "Esta guía describe los pasos para configurar un broker
-%MQTT local con HiveMQ CE en un servidor Ubuntu 22.04."{]}
+%documenta, qué sistema configura o qué procedimiento explica.{]}
 %
 %\section{Requisitos Previos}
 %
@@ -494,7 +393,7 @@ conciso. Máximo 3 párrafos.}
 %\section{Conclusión}
 %
 %{[}Resuma en 2--3 oraciones el resultado esperado al completar la guía
-%y el siguiente paso natural (próxima guía, prueba de validación, etc.).{]}
+%y el siguiente paso natural.{]}
 %
 %\FirmaSimple
 
