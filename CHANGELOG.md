@@ -1,5 +1,32 @@
 # CHANGELOG — Sistema de Plantillas CORIOTLAB
 
+## [2.0.0] — 2026-06-22
+
+### Reestructuración mayor del repositorio
+
+#### Estructura
+- Directorio `plantillas/` reemplaza a `informes/` como ubicación de las plantillas canónicas
+- Directorio `formatos/` consolida plantillas Word (.docx) y PowerPoint (.pptx)
+- Manual unificado `docs/MANUAL_USUARIO.md` reemplaza los 4 manuales separados anteriores
+- Eliminados: `informes/`, `plantilla_base/`, `prompts/` (arquitectura simplificada)
+- Eliminados: `compile.sh`, `setup_coriotlab.sh` (solo Windows/PowerShell desde v1.0)
+- Eliminado: `README_proyectos.md` (información integrada en MANUAL_USUARIO.md)
+
+#### Correcciones de compilación LaTeX
+- `plantilla_actividades.tex`: corregido `Overfull \hbox (23.9pt)` en tabla de actividades — anchos de columna ajustados de `0.6+3.2+5.8+1.4+0.8+2.5cm` a `0.6+3.0+5.2+1.3+0.7+2.5cm`
+- `plantilla_tecnico.tex`: corregido `Overfull \hbox (7.49pt)` en tabla de control de versiones — columna Fecha ampliada de 2.6cm a 2.9cm
+- `plantilla_tecnico.tex`: corregido `Overfull \hbox (2.14pt)` en tabla de firmas — columna separadora reducida de 0.8cm a 0.4cm
+- Ambas plantillas compilan sin errores con `Exit: 0`
+
+#### Documentación
+- `docs/MANUAL_USUARIO.md`: manual completo con instalación, configuración de cada plantilla, compilación LaTeX, paleta de colores y solución de problemas
+- `README.md`: actualizado para reflejar nueva estructura y apuntar al manual
+
+#### Scripts
+- `compile.ps1`: actualizado para apuntar a `plantillas/` como fuente principal; `todos` y `plantillas` son equivalentes
+
+---
+
 ## [1.3.0] — 2026-06-21
 
 ### Cambiado
