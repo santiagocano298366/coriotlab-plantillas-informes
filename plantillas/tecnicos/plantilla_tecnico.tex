@@ -4,100 +4,69 @@
 %% ╚══════════════════════════════════════════════════════════════════╝
 %%
 %% COMPILAR: xelatex -interaction=nonstopmode plantilla_tecnico.tex
-%%           (doble pasada — ejecutar el comando dos veces)
+%%           (doble pasada obligatoria)
 
 %% ═══════════════════════════════════════════════════════════════════
-%% ZONA DE CONFIGURACIÓN — editar aquí antes de compilar
+%% ZONA DE CONFIGURACIÓN — únicos campos a editar
 %% ═══════════════════════════════════════════════════════════════════
 
-%% TÍTULO completo del informe técnico (máx. 100 caracteres)
+\newcommand{\DocNumero}{IT-2025-001}         %% IT-AAAA-NNN
 \newcommand{\DocTitulo}{[Título completo del informe técnico]}
-
-%% SUBTÍTULO — enfoque metodológico o alcance
-\newcommand{\DocSubtitulo}{[Subtítulo técnico: enfoque o alcance del proyecto]}
-
-%% NÚMERO DE DOCUMENTO — Formato: IT-AAAA-NNN
-\newcommand{\DocNumero}{IT-2025-[NNN]}
-
-%% PROYECTO — nombre oficial
+\newcommand{\DocSubtitulo}{[Subtítulo: enfoque técnico o alcance del proyecto]}
 \newcommand{\DocProyecto}{[Nombre oficial del proyecto]}
-
-%% CÓDIGO INTERNO — Formato: CORIOT-AAAA-SIGLAS-NNN
-\newcommand{\DocCodigo}{CORIOT-2025-[SIGLAS]-[NNN]}
-
-%% CLIENTE / ENTIDAD destinataria
+\newcommand{\DocCodigo}{CORIOT-2025-[SIGLAS]-001}
 \newcommand{\DocCliente}{[Nombre del cliente o entidad destinataria]}
-
-%% PERÍODO — rango de fechas del proyecto
-\newcommand{\DocPeriodo}{[Mes inicial] --- [Mes final] [AAAA]}
-
-%% LUGAR
+\newcommand{\DocPeriodo}{[Mes inicial] — [Mes final] [AAAA]}
 \newcommand{\DocLugar}{Medellín, Colombia}
-
-%% VERSIÓN — iniciar en 1.0
 \newcommand{\DocVersion}{1.0}
-
-%% FECHA de emisión — DD de mes de AAAA
 \newcommand{\DocFecha}{[DD de mes de AAAA]}
-
-%% CONFIDENCIALIDAD: "Uso interno --- CORIOTLAB" | "Confidencial" | "Público"
-\newcommand{\DocConfidencialidad}{Uso interno --- CORIOTLAB}
-
-%% AUTOR principal
+\newcommand{\DocConfidencialidad}{Uso interno — CORIOTLAB}
 \newcommand{\DocAutor}{[Nombre completo del autor]}
-
-%% CARGO DEL AUTOR
-\newcommand{\DocCargoAutor}{[Cargo --- CORIOTLAB]}
-
-%% REVISOR
+\newcommand{\DocCargoAutor}{[Cargo — CORIOTLAB]}
 \newcommand{\DocRevisor}{[Nombre del revisor]}
-
-%% CARGO DEL REVISOR
-\newcommand{\DocCargoRevisor}{[Cargo del revisor --- CORIOTLAB]}
-
-%% ENTIDAD
-\newcommand{\DocEntidad}{CORIOTLAB --- ITM}
+\newcommand{\DocCargoRevisor}{[Cargo del revisor — CORIOTLAB]}
+\newcommand{\DocEntidad}{CORIOTLAB — ITM}
 
 %% ═══════════════════════════════════════════════════════════════════
 
-\documentclass[12pt, letterpaper]{article}
+\documentclass[11pt, letterpaper]{article}
 
-%% --- Codificación y lenguaje
+%% --- Idioma
 \usepackage[spanish, es-nodecimaldot, es-noshorthands]{babel}
 
-%% --- Fuentes (XeLaTeX — por nombre de familia Windows)
+%% --- Fuentes (nombres de familia Windows)
 \usepackage{fontspec}
 \setmainfont{Inter}
 \newfontfamily\FuenteTitulo{MuseoModerno}
 \newfontfamily\FuenteCodigo{Space Mono}
 
-%% --- Geometría — márgenes ajustados al membrete (header ~3cm, footer ~2.5cm)
+%% --- Geometría
 \usepackage[
-  top=3.5cm, bottom=3.0cm,
-  left=2.5cm, right=2.5cm
+  top=3.5cm, bottom=3.2cm,
+  left=2.8cm, right=2.8cm
 ]{geometry}
 
-%% --- Color
+%% --- Colores corporativos CORIOTLAB
 \usepackage[table]{xcolor}
 \definecolor{AzulITM}     {HTML}{102D69}
 \definecolor{Magenta}     {HTML}{C14894}
 \definecolor{AzulDigital} {HTML}{56ACDE}
 \definecolor{GrisPizarra} {HTML}{2F2F2F}
-\definecolor{GrisClaro}   {HTML}{F2F2F2}
-\definecolor{GrisMedio}   {HTML}{AAAAAA}
+\definecolor{GrisClaro}   {HTML}{F5F5F5}
+\definecolor{GrisMedio}   {HTML}{888888}
 \definecolor{GrisLinea}   {HTML}{DDDDDD}
 \definecolor{Blanco}      {HTML}{FFFFFF}
 
-%% --- Gráficos
+%% --- Gráficos y membrete
 \usepackage{graphicx}
 \usepackage{tikz}
 \usepackage{eso-pic}
 
 %% --- Tablas
 \usepackage{longtable}
-\usepackage{booktabs}
 \usepackage{array}
 \usepackage{colortbl}
+\usepackage{booktabs}
 \usepackage{multirow}
 
 %% --- Listas
@@ -112,83 +81,88 @@
 %% --- TOC y secciones
 \usepackage{titlesec}
 \usepackage{titletoc}
+\usepackage{needspace}
 \usepackage[hidelinks]{hyperref}
 
 %% --- Espaciado
 \usepackage{parskip}
-\setlength{\parskip}{6pt}
+\setlength{\parskip}{5pt}
 \setlength{\parindent}{0pt}
-\renewcommand{\arraystretch}{1.4}
+\renewcommand{\arraystretch}{1.45}
 
-%% -----------------------------------------------------------------
-%% MEMBRETE — opacidad completa en todas las páginas
-%% -----------------------------------------------------------------
+%% ─────────────────────────────────────────────────────────────────
+%% MEMBRETE — opacidad al 40% en todas las páginas
+%% ─────────────────────────────────────────────────────────────────
 \AddToShipoutPictureBG{%
   \begin{tikzpicture}[remember picture, overlay]
-    \node at (current page.center) {%
+    \node[opacity=0.40] at (current page.center) {%
       \includegraphics[width=\paperwidth, height=\paperheight,
-        keepaspectratio=false]%
-        {../../membretes/membrete_azul.png}%
+        keepaspectratio=false]{../../membretes/membrete_azul.png}%
     };
   \end{tikzpicture}%
 }
 
-%% Sin encabezado ni pie — el membrete los provee
 \pagestyle{empty}
 
-%% -----------------------------------------------------------------
-%% SECCIONES
-%% -----------------------------------------------------------------
+%% ─────────────────────────────────────────────────────────────────
+%% ESTILOS DE SECCIÓN
+%% ─────────────────────────────────────────────────────────────────
 \titleformat{\section}
   {\FuenteTitulo\large\color{AzulITM}\bfseries}
-  {\thesection.}{0.5em}{}
+  {\thesection.}{0.5em}{}[\vspace{-2pt}{\color{AzulDigital}\rule{\linewidth}{1.2pt}}]
+
 \titleformat{\subsection}
   {\FuenteTitulo\normalsize\color{GrisPizarra}\bfseries}
   {\thesubsection.}{0.5em}{}
+
 \titleformat{\subsubsection}
   {\normalsize\color{GrisPizarra}\bfseries\itshape}
   {\thesubsubsection.}{0.5em}{}
-\titlespacing*{\section}      {0pt}{2em}{0.8em}
+
+\titlespacing*{\section}      {0pt}{2em}{0.9em}
 \titlespacing*{\subsection}   {0pt}{1.2em}{0.4em}
 \titlespacing*{\subsubsection}{0pt}{0.8em}{0.3em}
 
-%% -----------------------------------------------------------------
+%% ─────────────────────────────────────────────────────────────────
 %% CAJAS tcolorbox
-%% -----------------------------------------------------------------
+%% ─────────────────────────────────────────────────────────────────
 \tcbset{
   cajaNota/.style={
-    colback=AzulDigital!10, colframe=AzulDigital,
+    enhanced, colback=AzulDigital!8, colframe=AzulDigital,
     fonttitle=\FuenteTitulo\small\bfseries, coltitle=white,
-    boxrule=0pt, leftrule=4pt, title=Nota,
-    left=8pt, top=6pt, bottom=6pt
+    attach boxed title to top left={yshift=-2mm, xshift=6mm},
+    boxed title style={colback=AzulDigital, boxrule=0pt},
+    boxrule=0.4pt, top=8pt, bottom=8pt, left=10pt
   },
   cajaAlerta/.style={
-    colback=Magenta!8, colframe=Magenta,
+    enhanced, colback=Magenta!6, colframe=Magenta,
     fonttitle=\FuenteTitulo\small\bfseries, coltitle=white,
-    boxrule=0pt, leftrule=4pt, title=Advertencia,
-    left=8pt, top=6pt, bottom=6pt
+    attach boxed title to top left={yshift=-2mm, xshift=6mm},
+    boxed title style={colback=Magenta, boxrule=0pt},
+    boxrule=0.4pt, top=8pt, bottom=8pt, left=10pt
   },
   cajaResultado/.style={
-    colback=AzulITM!8, colframe=AzulITM,
+    enhanced, colback=AzulITM!6, colframe=AzulITM,
     fonttitle=\FuenteTitulo\small\bfseries, coltitle=white,
-    boxrule=0pt, leftrule=4pt, title=Resultado,
-    left=8pt, top=6pt, bottom=6pt
+    attach boxed title to top left={yshift=-2mm, xshift=6mm},
+    boxed title style={colback=AzulITM, boxrule=0pt},
+    boxrule=0.4pt, top=8pt, bottom=8pt, left=10pt
   },
   cajaDatos/.style={
     colback=GrisClaro, colframe=GrisLinea,
-    boxrule=0.6pt, left=8pt, top=6pt, bottom=6pt
+    boxrule=0.5pt, left=8pt, top=6pt, bottom=6pt, arc=2pt
   },
   cajaResumen/.style={
-    colback=AzulITM!8, colframe=AzulITM,
+    enhanced, colback=AzulITM!6, colframe=AzulITM,
     fonttitle=\FuenteTitulo\normalsize\bfseries, coltitle=white,
-    boxrule=1pt, title=Resumen Ejecutivo,
-    left=10pt, right=10pt, top=8pt, bottom=8pt
+    boxrule=0.8pt, title=Resumen Ejecutivo,
+    left=12pt, right=12pt, top=10pt, bottom=10pt, arc=3pt
   }
 }
 
-%% -----------------------------------------------------------------
+%% ─────────────────────────────────────────────────────────────────
 %% CÓDIGO lstlisting
-%% -----------------------------------------------------------------
+%% ─────────────────────────────────────────────────────────────────
 \lstdefinestyle{coriotcode}{
   basicstyle=\FuenteCodigo\small,
   backgroundcolor=\color{GrisClaro},
@@ -197,52 +171,81 @@
   stringstyle=\color{Magenta},
   numberstyle=\tiny\color{GrisMedio},
   numbers=left, numbersep=10pt,
-  breaklines=true, frame=none,
-  tabsize=2, showstringspaces=false,
-  aboveskip=8pt, belowskip=8pt
+  breaklines=true, frame=none, tabsize=2,
+  showstringspaces=false,
+  aboveskip=6pt, belowskip=6pt
 }
 \lstset{style=coriotcode}
 
 %% =================================================================
-%%  INICIO DEL DOCUMENTO
+%%  DOCUMENTO
 %% =================================================================
 \begin{document}
 \color{GrisPizarra}
 
-%% -----------------------------------------------------------------
-%% 1. PORTADA — misma lógica que el Word: título + metadata, sin barra TikZ
-%% -----------------------------------------------------------------
+%% ─────────────────────────────────────────────────────────────────
+%% 1. PORTADA — título centrado verticalmente
+%% ─────────────────────────────────────────────────────────────────
+\vspace*{\fill}
 
-{\FuenteTitulo\LARGE\color{AzulITM}\bfseries\DocTitulo}\par\vspace{0.3em}
-{\FuenteTitulo\normalsize\color{GrisPizarra}\DocSubtitulo}\par\vspace{1em}
-{\color{GrisLinea}\rule{\linewidth}{0.5pt}}\par\vspace{0.8em}
-\begin{tabular}{@{}ll@{}}
-  {\small\color{GrisMedio}Proyecto:}          & {\small\color{GrisPizarra}\DocProyecto} \\[3pt]
-  {\small\color{GrisMedio}Código:}            & {\small\color{GrisPizarra}\DocCodigo} \\[3pt]
-  {\small\color{GrisMedio}Cliente / Entidad:} & {\small\color{GrisPizarra}\DocCliente} \\[3pt]
-  {\small\color{GrisMedio}Período:}           & {\small\color{GrisPizarra}\DocPeriodo} \\[3pt]
-  {\small\color{GrisMedio}Lugar:}             & {\small\color{GrisPizarra}\DocLugar} \\[3pt]
-  {\small\color{GrisMedio}Versión:}           & {\small\color{GrisPizarra}\DocVersion} \\[3pt]
-  {\small\color{GrisMedio}Fecha:}             & {\small\color{GrisPizarra}\DocFecha} \\[3pt]
-  {\small\color{GrisMedio}Confidencialidad:}  & {\small\color{GrisPizarra}\DocConfidencialidad} \\
-\end{tabular}
+\begin{center}
 
-\vspace{1.4em}
+  %% Etiqueta de tipo
+  {\FuenteTitulo\small\color{AzulDigital}\bfseries
+    \MakeUppercase{Informe Técnico}\quad\textbf{·}\quad\DocNumero}
 
-%% RESUMEN EJECUTIVO en portada
-\begin{tcolorbox}[cajaResumen]
-  {[}Síntesis ejecutiva del informe. Describa en 5--8 oraciones:
-  el contexto del proyecto, el problema abordado, la metodología
-  empleada, los principales resultados obtenidos y la conclusión
-  central. Evite tecnicismos excesivos: este resumen lo leerán
-  directivos y clientes sin formación técnica profunda.{]}
-\end{tcolorbox}
+  \vspace{1.6em}
+
+  %% Título
+  {\FuenteTitulo\fontsize{22}{27}\selectfont\color{AzulITM}\bfseries
+    \DocTitulo}
+
+  \vspace{0.6em}
+
+  %% Subtítulo
+  {\FuenteTitulo\large\color{GrisPizarra}
+    \DocSubtitulo}
+
+  \vspace{2em}
+
+  %% Separador decorativo
+  {\color{GrisLinea}\rule{0.25\linewidth}{0.5pt}}%
+  \quad{\FuenteTitulo\color{AzulITM}\textbf{>}}\quad%
+  {\color{GrisLinea}\rule{0.25\linewidth}{0.5pt}}
+
+  \vspace{2em}
+
+  %% Metadatos en dos columnas
+  \begin{tabular}{r@{\enspace}l@{\qquad\qquad}r@{\enspace}l}
+    {\small\color{GrisMedio}Proyecto}          & {\small\color{GrisPizarra}\DocProyecto}
+    & {\small\color{GrisMedio}Versión}          & {\small\color{GrisPizarra}\DocVersion} \\[4pt]
+    {\small\color{GrisMedio}Código}            & {\small\color{GrisPizarra}\DocCodigo}
+    & {\small\color{GrisMedio}Fecha}            & {\small\color{GrisPizarra}\DocFecha} \\[4pt]
+    {\small\color{GrisMedio}Cliente / Entidad} & {\small\color{GrisPizarra}\DocCliente}
+    & {\small\color{GrisMedio}Lugar}            & {\small\color{GrisPizarra}\DocLugar} \\[4pt]
+    {\small\color{GrisMedio}Período}           & {\small\color{GrisPizarra}\DocPeriodo}
+    & {\small\color{GrisMedio}Confidencialidad} & {\small\color{GrisPizarra}\DocConfidencialidad} \\
+  \end{tabular}
+
+  \vspace{2em}
+
+  %% Resumen ejecutivo en portada
+  \begin{tcolorbox}[cajaResumen, width=\linewidth]
+    [Síntesis ejecutiva en 5--8 oraciones: contexto del proyecto,
+    problema abordado, metodología empleada, principales resultados
+    y conclusión central. Dirigido a directivos y clientes sin
+    formación técnica profunda.]
+  \end{tcolorbox}
+
+\end{center}
+
+\vspace*{\fill}
 
 \newpage
 
-%% -----------------------------------------------------------------
+%% ─────────────────────────────────────────────────────────────────
 %% 2. CONTROL DE VERSIONES
-%% -----------------------------------------------------------------
+%% ─────────────────────────────────────────────────────────────────
 \section*{Control de Versiones}
 \addcontentsline{toc}{section}{Control de Versiones}
 
@@ -250,186 +253,189 @@
 \begin{longtable}{
   >{\centering\arraybackslash}p{1.4cm}
   >{\centering\arraybackslash}p{2.6cm}
-  p{3.8cm}
-  p{6.4cm}
+  p{4.0cm}
+  p{6.2cm}
 }
 \rowcolor{AzulITM}
-\color{Blanco}\FuenteTitulo\small\bfseries Versión &
-\color{Blanco}\FuenteTitulo\small\bfseries Fecha &
-\color{Blanco}\FuenteTitulo\small\bfseries Autor &
-\color{Blanco}\FuenteTitulo\small\bfseries Descripción del cambio \\
+{\color{Blanco}\FuenteTitulo\small\bfseries Versión} &
+{\color{Blanco}\FuenteTitulo\small\bfseries Fecha} &
+{\color{Blanco}\FuenteTitulo\small\bfseries Autor} &
+{\color{Blanco}\FuenteTitulo\small\bfseries Descripción del cambio} \\[2pt]
 \endfirsthead
 \rowcolor{AzulITM}
-\color{Blanco}\FuenteTitulo\small\bfseries Versión &
-\color{Blanco}\FuenteTitulo\small\bfseries Fecha &
-\color{Blanco}\FuenteTitulo\small\bfseries Autor &
-\color{Blanco}\FuenteTitulo\small\bfseries Descripción del cambio \\
+{\color{Blanco}\FuenteTitulo\small\bfseries Versión} &
+{\color{Blanco}\FuenteTitulo\small\bfseries Fecha} &
+{\color{Blanco}\FuenteTitulo\small\bfseries Autor} &
+{\color{Blanco}\FuenteTitulo\small\bfseries Descripción del cambio} \\[2pt]
 \endhead
 \rowcolor{white}
-1.0 & {[}DD/MM/AAAA{]} & \DocAutor & Versión inicial. \\
+1.0 & [DD/MM/AAAA] & \DocAutor & Versión inicial del documento. \\
 \rowcolor{GrisClaro}
-1.1 & {[}DD/MM/AAAA{]} & \DocAutor & {[}Descripción de la revisión.{]} \\
+1.1 & [DD/MM/AAAA] & \DocAutor & [Descripción de la revisión.] \\
 \end{longtable}
 
-%% -----------------------------------------------------------------
+%% ─────────────────────────────────────────────────────────────────
 %% 3. TABLA DE CONTENIDO
-%% -----------------------------------------------------------------
+%% ─────────────────────────────────────────────────────────────────
 \newpage
 \tableofcontents
 \newpage
 
-%% -----------------------------------------------------------------
+%% ─────────────────────────────────────────────────────────────────
 %% 4. INTRODUCCIÓN
-%% -----------------------------------------------------------------
+%% ─────────────────────────────────────────────────────────────────
 \section{Introducción}
 
-{\itshape\color{GrisMedio}%
-{[}Párrafo 1: contexto institucional del proyecto. ¿En qué marco se
-desarrolla este trabajo? ¿Qué área o entidad lo impulsa?{]}
+[Párrafo 1: contexto institucional del proyecto. ¿En qué marco se
+desarrolla este trabajo? ¿Qué área o entidad lo impulsa?]
 
-{[}Párrafo 2: descripción del problema o necesidad que motivó el proyecto.
-¿Qué situación se busca resolver o mejorar?{]}
+[Párrafo 2: descripción del problema o necesidad que motivó el
+proyecto. ¿Qué situación se busca resolver o mejorar?]
 
-{[}Párrafo 3: descripción general de la solución implementada y el
-enfoque técnico adoptado.{]}}
+[Párrafo 3: descripción general de la solución implementada y el
+enfoque técnico adoptado.]
 
 \begin{tcolorbox}[cajaDatos]
-  \textbf{Alcance del documento:} {[}Especifique qué fases, sistemas
+  \textbf{Alcance del documento:} [Especifique qué fases, sistemas
   o componentes cubre este informe, y cuáles quedan fuera del alcance.
-  Indique el período que comprende: \DocPeriodo.{]}
+  Período: \DocPeriodo.]
 \end{tcolorbox}
 
-%% -----------------------------------------------------------------
+%% ─────────────────────────────────────────────────────────────────
 %% 5. OBJETIVOS
-%% -----------------------------------------------------------------
+%% ─────────────────────────────────────────────────────────────────
 \section{Objetivos}
 
 \subsection{Objetivo General}
 
-{\itshape\color{GrisMedio}%
-{[}Verbo infinitivo{]} {[}objeto o sistema desarrollado{]} para {[}propósito
-o beneficio esperado{]}, mediante {[}método o tecnología empleada{]}.}
+[Verbo infinitivo] [objeto o sistema desarrollado] para [propósito
+o beneficio esperado], mediante [método o tecnología empleada].
 
 \subsection{Objetivos Específicos}
 
-\begin{itemize}[label={\color{AzulITM}\textbf{>}}, leftmargin=1.8em, itemsep=5pt]
-  \item {[}Objetivo específico 1: acción concreta y verificable.{]}
-  \item {[}Objetivo específico 2: acción concreta y verificable.{]}
-  \item {[}Objetivo específico 3: acción concreta y verificable.{]}
+\begin{itemize}[label={\color{AzulITM}\textbf{>}},
+                leftmargin=1.8em, itemsep=5pt, topsep=2pt]
+  \item [Objetivo específico 1: acción concreta y verificable.]
+  \item [Objetivo específico 2: acción concreta y verificable.]
+  \item [Objetivo específico 3: acción concreta y verificable.]
 \end{itemize}
 
-%% -----------------------------------------------------------------
-%% SECCIONES OPCIONALES — descomentar según proyecto
-%% -----------------------------------------------------------------
+%% ─────────────────────────────────────────────────────────────────
+%% SECCIONES OPCIONALES — descomentar las que apliquen
+%% ─────────────────────────────────────────────────────────────────
 
-%% ── BLOQUE OPT-A: Marco Teórico ──────────────────────────────────
+%% ── OPT-A: Marco Teórico ─────────────────────────────────────────
 %\section{Marco Teórico}
-%\subsection{{[}Concepto o tecnología clave 1{]}}
-%{[}Definición y relevancia para el proyecto. 1--2 párrafos.{]}
-%\subsection{{[}Concepto o tecnología clave 2{]}}
-%{[}Definición y relevancia para el proyecto. 1--2 párrafos.{]}
+%\subsection{[Concepto o tecnología clave 1]}
+%[Definición y relevancia para el proyecto. 1--2 párrafos.]
+%\subsection{[Concepto o tecnología clave 2]}
+%[Definición y relevancia. 1--2 párrafos.]
 
-%% ── BLOQUE OPT-B: Metodología ────────────────────────────────────
+%% ── OPT-B: Metodología ───────────────────────────────────────────
 %\section{Metodología}
-%{[}Descripción del enfoque metodológico adoptado y justificación.{]}
+%[Descripción del enfoque metodológico adoptado y justificación.]
 %\begin{enumerate}[leftmargin=1.8em, itemsep=4pt]
-%  \item \textbf{Fase 1 --- {[}Nombre{]}:} {[}Descripción de actividades.{]}
-%  \item \textbf{Fase 2 --- {[}Nombre{]}:} {[}Descripción de actividades.{]}
-%  \item \textbf{Fase 3 --- {[}Nombre{]}:} {[}Descripción de actividades.{]}
+%  \item \textbf{Fase 1 — [Nombre]:} [Actividades.]
+%  \item \textbf{Fase 2 — [Nombre]:} [Actividades.]
+%  \item \textbf{Fase 3 — [Nombre]:} [Actividades.]
 %\end{enumerate}
 
-%% ── BLOQUE OPT-C: Desarrollo Técnico + Código ────────────────────
+%% ── OPT-C: Desarrollo Técnico + Código ───────────────────────────
 %\section{Desarrollo Técnico}
-%\subsection{{[}Nombre del componente 1{]}}
-%{[}Descripción del componente: propósito, diseño e implementación.{]}
+%\subsection{[Componente o módulo 1]}
+%[Descripción: propósito, diseño e implementación.]
 %\begin{tcolorbox}[cajaDatos]
 %\begin{lstlisting}[language=Python]
 %def ejemplo():
 %    pass
 %\end{lstlisting}
 %\end{tcolorbox}
-%\subsection{{[}Nombre del componente 2{]}}
-%{[}Descripción del componente.{]}
+%\subsection{[Componente o módulo 2]}
+%[Descripción del componente.]
 %\begin{tcolorbox}[cajaDatos]
 %\begin{lstlisting}[language=C++]
 %void setup() { }
 %\end{lstlisting}
 %\end{tcolorbox}
 
-%% ── BLOQUE OPT-D: Resultados con tabla de indicadores ────────────
+%% ── OPT-D: Resultados con indicadores ────────────────────────────
 %\section{Resultados}
-%\begin{longtable}{p{4.2cm} >{\centering}p{2.2cm} >{\centering}p{2.2cm}
-%    >{\centering}p{2.2cm} p{3.2cm}}
+%\begin{longtable}{p{4.2cm} >{\centering}p{2.0cm} >{\centering}p{2.0cm}
+%    >{\centering}p{2.0cm} p{3.4cm}}
 %\rowcolor{AzulITM}
-%\color{Blanco}\FuenteTitulo\small\bfseries Indicador &
-%\color{Blanco}\FuenteTitulo\small\bfseries Meta &
-%\color{Blanco}\FuenteTitulo\small\bfseries Logrado &
-%\color{Blanco}\FuenteTitulo\small\bfseries \% Cumpl. &
-%\color{Blanco}\FuenteTitulo\small\bfseries Observaciones \\
+%{\color{Blanco}\FuenteTitulo\small\bfseries Indicador} &
+%{\color{Blanco}\FuenteTitulo\small\bfseries Meta} &
+%{\color{Blanco}\FuenteTitulo\small\bfseries Logrado} &
+%{\color{Blanco}\FuenteTitulo\small\bfseries \% Cumpl.} &
+%{\color{Blanco}\FuenteTitulo\small\bfseries Observaciones} \\[2pt]
 %\endfirsthead
 %\rowcolor{white}
-%{[}Indicador 1{]} & {[}Meta{]} & {[}Valor{]} & {[}XX\%{]} & {[}Nota.{]} \\
+%[Indicador 1] & [Meta] & [Valor] & [XX\%] & [Nota breve.] \\
 %\rowcolor{GrisClaro}
-%{[}Indicador 2{]} & {[}Meta{]} & {[}Valor{]} & {[}XX\%{]} & {[}Nota.{]} \\
+%[Indicador 2] & [Meta] & [Valor] & [XX\%] & [Nota breve.] \\
 %\end{longtable}
-%\begin{tcolorbox}[cajaResultado]
-%  {[}Síntesis de los resultados.{]}
+%\begin{tcolorbox}[cajaResultado, title=Resultado]
+%  [Síntesis de resultados: se cumplieron / superaron / no alcanzaron los indicadores.]
 %\end{tcolorbox}
 
-%% ── BLOQUE OPT-E: Recomendaciones ───────────────────────────────
+%% ── OPT-E: Recomendaciones ───────────────────────────────────────
 %\section{Recomendaciones}
-%\begin{itemize}[label={\color{AzulITM}\textbf{>}}, leftmargin=1.8em, itemsep=4pt]
-%  \item {[}Recomendación 1: acción concreta, justificación breve.{]}
-%  \item {[}Recomendación 2: acción concreta, justificación breve.{]}
+%\begin{itemize}[label={\color{AzulITM}\textbf{>}},
+%                leftmargin=1.8em, itemsep=5pt]
+%  \item [Recomendación 1: acción concreta, justificación breve.]
+%  \item [Recomendación 2: acción concreta, justificación breve.]
 %\end{itemize}
 
-%% ── BLOQUE OPT-F: Referencias Bibliográficas ─────────────────────
+%% ── OPT-F: Referencias Bibliográficas ────────────────────────────
 %\section{Referencias Bibliográficas}
 %\begin{enumerate}[leftmargin=1.8em, itemsep=4pt]
-%  \item {[}Apellido, Inicial. (Año). \textit{Título}. Editorial / URL.{]}
+%  \item [Apellido, I. (Año). \textit{Título}. Editorial / URL.]
 %\end{enumerate}
 
-%% ── BLOQUE OPT-G: Anexos ─────────────────────────────────────────
+%% ── OPT-G: Anexos ────────────────────────────────────────────────
 %\appendix
-%\section{{[}Nombre del Anexo A{]}}
-%{[}Contenido del anexo A.{]}
+%\section{[Nombre del Anexo A]}
+%[Contenido del anexo A.]
 
-%% -----------------------------------------------------------------
+%% ─────────────────────────────────────────────────────────────────
 %% 6. CONCLUSIONES
-%% -----------------------------------------------------------------
+%% ─────────────────────────────────────────────────────────────────
 \section{Conclusiones}
 
-{\itshape\color{GrisMedio}%
-{[}Párrafo 1: valoración global del proyecto. ¿Se cumplieron los objetivos?{]}
+[Párrafo 1: valoración global del proyecto. ¿Se cumplieron los
+objetivos? ¿Cuál fue el resultado principal?]
 
-{[}Párrafo 2: hallazgos técnicos, limitaciones o aprendizajes relevantes.{]}}
+[Párrafo 2: hallazgos técnicos, limitaciones encontradas o
+aprendizajes relevantes que deben quedar documentados.]
 
-\begin{tcolorbox}[cajaResultado]
-  {[}Síntesis evaluativa: el proyecto {[}cumplió / superó / no alcanzó{]}
-  los indicadores de desempeño establecidos.{]}
+\begin{tcolorbox}[cajaResultado, title=Resultado]
+  [Síntesis evaluativa: el proyecto [cumplió / superó / no alcanzó]
+  los indicadores establecidos. Se recomienda [acción de seguimiento
+  o próxima fase.]]
 \end{tcolorbox}
 
-%% -----------------------------------------------------------------
+%% ─────────────────────────────────────────────────────────────────
 %% 7. FIRMAS Y APROBACIÓN
-%% -----------------------------------------------------------------
+%% ─────────────────────────────────────────────────────────────────
+\needspace{6cm}
 \section*{Firmas y Aprobación}
 \addcontentsline{toc}{section}{Firmas y Aprobación}
 
-\vspace{1.5em}
+\vspace{1.8em}
 \noindent
-\begin{tabular}{p{7cm} p{1cm} p{7cm}}
-  \multicolumn{1}{c}{\textbf{\small\color{AzulITM}Elaborado por}} & &
-  \multicolumn{1}{c}{\textbf{\small\color{AzulITM}Revisado y aprobado por}} \\[0.6em]
-  \multicolumn{1}{l}{\color{AzulITM}\rule{7cm}{0.6pt}} & &
-  \multicolumn{1}{l}{\color{AzulITM}\rule{7cm}{0.6pt}} \\[4pt]
-  {\small\bfseries\color{GrisPizarra}\DocAutor} & &
-  {\small\bfseries\color{GrisPizarra}\DocRevisor} \\[2pt]
-  {\footnotesize\color{GrisMedio}\DocCargoAutor} & &
-  {\footnotesize\color{GrisMedio}\DocCargoRevisor} \\[1pt]
-  {\footnotesize\color{GrisMedio}\DocEntidad} & &
-  {\footnotesize\color{GrisMedio}\DocEntidad} \\[1pt]
-  {\footnotesize\color{GrisMedio}\DocFecha} & &
-  {\footnotesize\color{GrisMedio}\DocFecha} \\
+\begin{tabular}{p{7cm} p{0.8cm} p{7cm}}
+  \multicolumn{1}{c}{{\small\color{GrisMedio}Elaborado por}} & &
+  \multicolumn{1}{c}{{\small\color{GrisMedio}Revisado y aprobado por}} \\[1em]
+  {\color{AzulITM}\rule{7cm}{0.8pt}} & &
+  {\color{AzulITM}\rule{7cm}{0.8pt}} \\[6pt]
+  {\normalsize\bfseries\color{GrisPizarra}\DocAutor} & &
+  {\normalsize\bfseries\color{GrisPizarra}\DocRevisor} \\[3pt]
+  {\small\color{GrisMedio}\DocCargoAutor} & &
+  {\small\color{GrisMedio}\DocCargoRevisor} \\[2pt]
+  {\small\color{GrisMedio}\DocEntidad} & &
+  {\small\color{GrisMedio}\DocEntidad} \\[2pt]
+  {\small\color{GrisMedio}\DocFecha} & &
+  {\small\color{GrisMedio}\DocFecha} \\
 \end{tabular}
 
 \end{document}
